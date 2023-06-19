@@ -1,6 +1,10 @@
 <div align="center">
-<img src="https://cdn.discordapp.com/attachments/1128849819444715620/1129153641010450483/popcorn.png?ex=651a8506&is=65193386&hm=8eb904ec9e8725edece937c2c669c5172fc87dc09fb51c160eaab5a61429459a&" style="width: 15%;"></img>
+
+<img src="./images/icons/popcorn-white.svg" style="width: 15%;"></img>
 <h1>The Popcorn Kernel</h1>
+
+---
+
 </div>
 
 Welcome to the Popcorn Kernel project! Our mission is to learn more about operating systems and expand our coding and developing skills.
