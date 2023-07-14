@@ -33,3 +33,6 @@ Submit a pull request, describing your changes and their purpose clearly.
 - [electron271](https://github.com/electron271) - Lead Developer
 - [SatoTsukasaCode](https://github.com/SatoTsukasaCode) - Developer
 - [Lily8000](https://github.com/Lily8000) - Documentation
+
+## Contact us
+- [Discord](https://discord.gg/d9974fz5sS)
