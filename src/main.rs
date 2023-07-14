@@ -5,7 +5,6 @@
 #![test_runner(crate::test_runner)] // declare the test runner
 
 use core::panic::PanicInfo;
-mod acpi;
 mod vga_buffer;
 
 #[no_mangle] // don't mangle the name of this function
