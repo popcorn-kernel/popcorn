@@ -1,2 +1,2 @@
 # popcorn
-the popcorn kernel built on TRANS (coming soon)
+the popcorn kernel built on the TRANS ecosystem (coming soon)
