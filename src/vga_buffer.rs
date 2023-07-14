@@ -75,13 +75,13 @@ impl Writer {
         }
     }
     fn new_line(&mut self) {
-        for row in 1..BUFFER_HEIGHT {
-            for col in 0..BUFFER_WIDTH {
+        for row in 1..BUF_HEIGHT {
+            for col in 0..BUF_WIDTH {
                 let character = self.buffer.chars[row][col].read();
                 self.buffer.chars[row - 1][col].write(character);
             }
         }
-        self.clear_row(BUFFER_HEIGHT - 1);
+        self.clear_row(BUF_HEIGHT - 1);
         self.column_position = 0;
     }
 
@@ -91,7 +91,7 @@ impl Writer {
             color_code: self.color_code,
          };
 
-        for col in 0..BUFFER_WIDTH {
+        for col in 0..BUF_WIDTH {
             self.buffer.chars[row][col].write(blank);
         }
     }
