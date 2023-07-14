@@ -26,7 +26,7 @@ fn panic(_info: &PanicInfo) -> ! {
 
 #[cfg(test)]
 fn test_runner(tests: &[&dyn Fn()]) {
-    println!("Running {} tests", tests.len());
+    libc_println!("Running {} tests", tests.len());
     for test in tests {
         test();
     }
@@ -36,5 +36,5 @@ fn test_runner(tests: &[&dyn Fn()]) {
 fn trivial_assertion() {
     print!("trivial assertion...");
     assert!(1 == 1);
-    println!("[ok]");
+    libc_println!("[ok]");
 }
