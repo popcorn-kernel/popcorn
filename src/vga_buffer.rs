@@ -130,7 +130,7 @@ macro_rules! print {
 }
 
 #[macro_export]
-macro_rules! println {
+macro_rules! libc_println {
     () => ($crate::print!("\n"));
     ($($arg:tt)*) => ($crate::print!("{}\n", format_args!($($arg)*)));
 }
