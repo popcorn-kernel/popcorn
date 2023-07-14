@@ -1,4 +1,7 @@
 use spin::Mutex;
+use volatile::Volatile;
+use core::fmt;
+use lazy_static::lazy_static;
 
 #[allow(dead_code)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -42,7 +45,7 @@ const BUF_WIDTH: usize = 80;
 
 #[repr(transparent)]
 struct Buffer {
-        chars: [[ScreenChar; BUF_WIDTH]; BUF_HEIGHT],
+        chars: [[Volatile<ScreenChar>; BUF_WIDTH]; BUF_HEIGHT],
 }
 
 pub struct Writer {
@@ -63,10 +66,10 @@ impl Writer {
                 let col = self.column_position;
 
                 let color_code = self.color_code;
-                self.buffer.chars[row, col] = ScreenChar {
+                self.buffer.chars[row, col].write(ScreenChar {
                     ascii_character: byte,
                     color_code,
-                };
+                });
                 self.column_position += 1;
             }
         }
@@ -92,6 +95,23 @@ impl Writer {
             self.buffer.chars[row][col].write(blank);
         }
     }
+
+    pub fn write_string(&mut self, s: &str) {
+        for byte in s.bytes() {
+            match byte {
+                // printable ASCII byte or newline
+                0x20..=0x7e | b'\n' => self.write_byte(byte),
+                _ => self.write_byte(0xFE)
+            }
+        }
+    }
+}
+
+impl fmt::Write for Writer {
+    fn write_str(&mut self, s: &str) -> fmt::Result {
+         self.write_string(s);
+         Ok(())
+    }
 }
 
 lazy_static! {
@@ -102,4 +122,21 @@ lazy_static! {
         });
 }
 
+// macros
 
+#[macro_export]
+macro_rules! print {
+    ($($arg:tt)*) => ($crate::vga_buffer::_print(format_args!($($arg)*)));
+}
+
+#[macro_export]
+macro_rules! println {
+    () => ($crate::print!("\n"));
+    ($($arg:tt)*) => ($crate::print!("{}\n", format_args!($($arg)*)));
+}
+
+#[doc(hidden)]
+pub fn _print(args: fmt::Arguments) {
+    use core::fmt::Write;
+    WRITER.lock().write_fmt(args).unwrap();
+}
