@@ -1,6 +1,6 @@
 Welcome to the Popcorn Kernel project! Our mission is to build a powerful and innovative kernel within the TRANS ecosystem. We aim to create a robust and efficient operating system that enhances user experience while promoting inclusivity and diversity.
 
-## About TRANS Ecosystem
+# About TRANS Ecosystem
 TRANS Ecosystem is an open-source community dedicated to developing cutting-edge technologies and software. It fosters collaboration and encourages contributions from developers worldwide. TRANS Ecosystem embraces values of equality, respect, and tolerance, supporting all individuals regardless of their gender identity, race, or background.
 
 # Project Goals
