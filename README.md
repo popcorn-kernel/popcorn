@@ -28,7 +28,7 @@ Test thoroughly and ensure your changes do not introduce any regressions.
 
 Submit a pull request, describing your changes and their purpose clearly.
 
- the devs!: ## Developers
+ ## Developers
 - [SparkySimp](https://github.com/SparkySimp) - Lead Developer
 - [electron271](https://github.com/electron271) - Lead Developer
 - [SatoTsukasaCode](https://github.com/SatoTsukasaCode) - Developer
