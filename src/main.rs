@@ -7,6 +7,8 @@
 use core::panic::PanicInfo;
 #[macro_use]
 extern crate popcorn;
+mod acpi;
+mod vga_buffer;
 
 #[no_mangle] // don't mangle the name of this function
 pub extern "C" fn _start() -> ! {
@@ -22,7 +24,6 @@ fn panic(_info: &PanicInfo) -> ! {
     loop {} // we need a less resource intensive pause mechanism
 }
 
-
 #[cfg(test)]
 fn test_runner(tests: &[&dyn Fn()]) {
     println!("Running {} tests", tests.len());
@@ -37,5 +38,3 @@ fn trivial_assertion() {
     assert!(1 == 1);
     println!("[ok]");
 }
-
-

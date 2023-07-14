@@ -14,34 +14,27 @@ const RTC_NMI_DISABLE_MASK: u8 = 0x80;
 const ACPI_OFF: u8 = 0x02;
 
 fn out_cmos_register(register: u8, value: u8) {
-        let mut port = Port::new(CMOS_ADDR_PORT);
-            unsafe {
-                        port.write(register);
-                            }
+    let mut port = Port::new(CMOS_ADDR_PORT);
+    unsafe {
+            port.write(register);
+    }
 
-                let mut port = Port::new(CMOS_DATA_PORT);
-                    unsafe {
-                                port.write(value);
-                                    }
+    let mut port = Port::new(CMOS_DATA_PORT);
+    unsafe {
+            port.write(value);
+    }
 }
 
 fn disable_nmi() {
-        let current = unsafe {
-                    Port::<u8>::new(CMOS_ADDR_PORT).read()
-                            };
+        let current = unsafe { Port::<u8>::new(CMOS_ADDR_PORT).read() };
 
-            let mut new_value = current & !RTC_REGISTER_B_MASK;
-                new_value |= RTC_NMI_DISABLE_MASK;
+        let mut new_value = current & !RTC_REGISTER_B_MASK;
+        new_value |= RTC_NMI_DISABLE_MASK;
 
-                    out_cmos_register(CMOS_STATUS_B, new_value);
+        out_cmos_register(CMOS_STATUS_B, new_value);
 }
 
 fn shutdown() {
         disable_nmi();
-            out_cmos_register(CMOS_STATUS_A, ACPI_OFF);
+        out_cmos_register(CMOS_STATUS_A, ACPI_OFF);
 }
-
-fn main() {
-        shutdown();
-}
-
