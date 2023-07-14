@@ -1,6 +1,3 @@
-Popcorn Kernel - TRANS Ecosystem
-Popcorn Kernel Logo
-
 Welcome to the Popcorn Kernel project! Our mission is to build a powerful and innovative kernel within the TRANS ecosystem. We aim to create a robust and efficient operating system that enhances user experience while promoting inclusivity and diversity.
 
 About TRANS Ecosystem
@@ -30,5 +27,9 @@ Make your desired changes or add new features to the codebase.
 Test thoroughly and ensure your changes do not introduce any regressions.
 
 Submit a pull request, describing your changes and their purpose clearly.
- 
- the devs: lily8000,cadmiumc4,satotsukasa,and hopefully more!
+
+ the devs!: ## Developers
+- [SparkySimp](https://github.com/SparkySimp) - Lead Developer
+- [electron271](https://github.com/electron271) - Lead Developer
+- [SatoTsukasaCode](https://github.com/SatoTsukasaCode) - Developer
+- [Lily8000](https://github.com/Lily8000) - Documentation
