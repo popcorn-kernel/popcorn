@@ -5,8 +5,6 @@
 #![test_runner(crate::test_runner)] // declare the test runner
 
 use core::panic::PanicInfo;
-#[macro_use]
-extern crate popcorn;
 mod acpi;
 mod vga_buffer;
 
@@ -19,7 +17,7 @@ pub extern "C" fn _start() -> ! {
 
 /// This function is called on panic.
 #[panic_handler]
-fn panic(_info: &PanicInfo) -> ! {
+fn panic(info: &PanicInfo) -> ! {
     libc_println!("{}", info);
     loop {} // we need a less resource intensive pause mechanism
 }
