@@ -20,7 +20,7 @@ pub extern "C" fn _start() -> ! {
 /// This function is called on panic.
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
-    println!("{}", info);
+    libc_println!("{}", info);
     loop {} // we need a less resource intensive pause mechanism
 }
 
