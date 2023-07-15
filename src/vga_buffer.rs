@@ -3,6 +3,8 @@ use volatile::Volatile;
 use core::fmt;
 use lazy_static::lazy_static;
 
+
+
 #[allow(dead_code)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(u8)]
@@ -74,6 +76,31 @@ impl Writer {
             }
         }
     }
+    pub fn set_cursor_pos(&mut self, row: usize, col: usize) {
+        if row >= BUF_HEIGHT || col >= BUF_WIDTH {
+            return; // Invalid position, do nothing
+        }
+        self.column_position = col;
+    }
+
+    pub fn clear_screen(&mut self, color: Color) {
+        let blank = ScreenChar {
+            ascii_character: b' ',
+            color_code: ColorCode::new(color, color)
+        };
+
+        for row in 0..BUF_HEIGHT {
+            for col in 0..BUF_WIDTH {
+                self.buffer.chars[row][col].write(blank);
+            }
+        }
+
+        self.set_cursor_pos(0, 0);
+    }
+
+    fn set_color(&mut self, foreground: Color, background: Color) {
+        self.color_code = ColorCode::new(foreground, background);
+    }
     fn new_line(&mut self) {
         for row in 1..BUF_HEIGHT {
             for col in 0..BUF_WIDTH {
@@ -124,19 +151,75 @@ lazy_static! {
 
 // macros
 
+/// Prints to the VGA text buffer through the global `WRITER` instance.
+/// This macro ONLY accepts literal strings for the message.
+/// Accepts variable number of arguments for formatting.
 #[macro_export]
 macro_rules! print {
     ($($arg:tt)*) => ($crate::vga_buffer::_print(format_args!($($arg)*)));
 }
 
+/// Prints to the VGA text buffer through the global `WRITER` instance,
+/// with a newline appended.
+/// This macro ONLY accepts literal strings for the message.
+/// Accepts variable number of arguments for formatting.
 #[macro_export]
-macro_rules! libc_println {
+macro_rules! println {
     () => ($crate::print!("\n"));
-    ($($arg:tt)*) => ($crate::print!("{}\n", format_args!($($arg)*)));
+    ($($arg:expr),*) => {
+        $crate::print!("{}\n", format_args!($($arg),*))
+    };
 }
 
+/// Clears the screen with the given color.
+/// Accepts a `Color` enum value.
+/// See the `Color` enum for available colors.
+#[macro_export]
+macro_rules! clear_screen {
+    ($arg:expr) => {
+        $crate::vga_buffer::_clear_screen($arg);
+    };
+}
+
+/// Sets the foreground and background color for the VGA text buffer.
+/// Accepts two `Color` enum values.
+/// See the `Color` enum for available colors.
+/// The first argument is the foreground color, the second is the background color.
+#[macro_export]
+macro_rules! set_color {
+    ($foreground:expr, $background:expr) => ($crate::vga_buffer::_set_color($foreground, $background));
+}
+
+// private functions
+
+/**
+ *  \brief Prints to the VGA text buffer through the global `WRITER` instance.
+ *  This function is called by the `print!` macro.
+ *  \param args The arguments to print.
+ */
 #[doc(hidden)]
 pub fn _print(args: fmt::Arguments) {
     use core::fmt::Write;
     WRITER.lock().write_fmt(args).unwrap();
+}
+
+/**
+ *  \brief Clears the screen with the given color.
+ *  This function is called by the `clear_screen!` macro.
+ *  \param color The color to clear the screen with.
+ */
+#[doc(hidden)]
+pub fn _clear_screen(color: Color) {
+    WRITER.lock().clear_screen(color);
+}
+
+/**
+ *  \brief Sets the foreground and background color for the VGA text buffer.
+ *  This function is called by the `set_color!` macro.
+ *  \param foreground The foreground color.
+ *  \param background The background color.
+ */
+#[doc(hidden)]
+pub fn _set_color(foreground: Color, background: Color) {
+    WRITER.lock().set_color(foreground, background);
 }

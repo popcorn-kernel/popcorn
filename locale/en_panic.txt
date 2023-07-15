@@ -1,0 +1,18 @@
+                       Kernel Panic - System Error
+
+An unrecoverable error has occurred, and your system is no longer stable.
+To prevent damage to your computer, it must shut down.
+
+The problem seems to be from: {0}
+And the error is: {1}
+
+If this screen persists after restart, please make sure any new components are installed correctly.
+You can submit an issue at https://github.com/popcorn-kernel/popcorn.
+
+
+
+
+
+
+
+

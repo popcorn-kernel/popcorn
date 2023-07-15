@@ -1,7 +1,7 @@
 install:
 	cargo install bootimage
 
-build: install
+build:
 	cargo bootimage --target arch/x86_64-arch.json
 
 run: build
