@@ -23,6 +23,8 @@ x86_64 = "0.14.1"
 version = "1.0"
 features = ["spin_no_std"]
 
+
+
 [package.metadata.bootimage]
 build-command = ["build"]
 test-args = ["-device", "isa-debug-exit,iobase=0xf4,iosize=0x04"]
