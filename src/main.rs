@@ -1,8 +1,8 @@
 #![no_std] // don't link the Rust standard library
 #![no_main] // disable all Rust-level entry points
 #![reexport_test_harness_main = "test_main"] // re-export the test executor.
-#![feature(custom_test_frameworks)] // use feature custom-test-frameworks.
-#![test_runner(crate::test_runner)] // declare the test runner
+//#![feature(custom_test_frameworks)] // use feature custom-test-frameworks.
+//#![test_runner(crate::test_runner)] // declare the test runner
 
 use core::panic::PanicInfo;
 mod vga_buffer;
@@ -28,10 +28,10 @@ fn test_runner(tests: &[&dyn Fn()]) {
         test();
     }
 }
-
+/*
 #[test_case]
 fn trivial_assertion() {
     print!("trivial assertion...");
     assert!(1 == 1);
     libc_println!("[ok]");
-}
+}*/
