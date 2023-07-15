@@ -1,8 +1,13 @@
 install:
 	cargo install bootimage
 
-build:
-	cargo bootimage
+build: install
+	cargo bootimage --target arch/x86_64-arch.json
 
-run:
-	qemu-system-x86_64 -drive format=raw,file=target/x86_64-blog_os/debug/bootimage-blog_os.bin
+run: build
+	cargo run
+
+clean:
+	cargo clean
+
+.PHONY: build
