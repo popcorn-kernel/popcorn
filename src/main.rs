@@ -49,6 +49,8 @@ pub extern "C" fn _start() -> ! {
     let (lv4_pagetable, _) = Cr3::read();
     println!("lv4_pagetable at: {:p}", lv4_pagetable.start_address());
 
+
+
     // Halt until the next interrupt
     hlt_loop();
 }

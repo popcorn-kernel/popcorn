@@ -12,7 +12,7 @@ at the above URL with all below information.
 
 INST_PTR:   0x{2:0>16x}     CODE_SEG:   {3}
 CPU_FLAGS:  0x{4:0>16x}     STACK_PTR:  0x{5:0>16x}
-STACK_SEG:  0x{6:0>16x}     FLAGS:      0x{7:0>16x}
+STACK_SEG:  0x{6:0>16x}     MEMORY:      0x{7:0>16x}
 CODE:       {8:?}
 MESSAGE:    {1}
 LINE:       {0}
