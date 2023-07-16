@@ -28,13 +28,17 @@ pub fn init() {
     interrupts::init_interrupts();
 }
 
+use bootloader::{BootInfo, entry_point};
+
+entry_point!(kernel_main);
+
 /**
- * @brief Entry point
- * @details This function is called by the bootloader. It is the entry point of the kernel.
- * @return Never returns
+ * @brief The main function of the kernel
+ * @details This function is called by the bootloader.
+ * @param boot_info The boot information passed by the bootloader.
  */
-#[no_mangle]
-pub extern "C" fn _start() -> ! {
+fn kernel_main(boot_info: &'static BootInfo) -> ! {
+    // This can be named arbitrarily.
 
     // Print some information
     clear_screen!(Color::Black);
@@ -54,6 +58,7 @@ pub extern "C" fn _start() -> ! {
     // Halt until the next interrupt
     hlt_loop();
 }
+
 
 /**
  * @brief Shuts down the operating system
