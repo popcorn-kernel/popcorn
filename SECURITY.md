@@ -16,7 +16,7 @@ To report a vulnerability, please open a new issue and tell us as much info as y
 4. If you have ideas of how to fix this issue, please share it with us.
 
 For example:
-Title: able to run administartor commands from a non-root shell
+Title: able to run administrator commands from a non-root shell
 
 Body:
 If you were to use a non-root shell and try to run root only commands, you will succeed.
