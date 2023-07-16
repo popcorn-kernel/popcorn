@@ -2,7 +2,7 @@ use core::fmt::Arguments;
 use core::panic::Location;
 use core::panic::PanicInfo;
 use crate::{clear_screen, print, println, serial_println, set_color};
-use x86_64::structures::idt::{InterruptDescriptorTable, InterruptStackFrame};
+use x86_64::structures::idt::{InterruptDescriptorTable, InterruptStackFrame, PageFaultErrorCode};
 use lazy_static::lazy_static;
 use x86_64::instructions::segmentation::Segment;
 use crate::gdt::{DOUBLE_FAULT_IST_INDEX, GDT};
@@ -49,6 +49,7 @@ lazy_static! {
             idt.invalid_opcode.set_handler_fn(invalid_opcode_handler);
             idt[InterruptIndex::Timer.as_usize()]
             .set_handler_fn(timer_interrupt_handler); // new
+            idt.page_fault.set_handler_fn(page_fault_handler);
             idt[InterruptIndex::Keyboard.as_usize()].set_handler_fn(keyboard_interrupt_handler);
         }
 
@@ -64,7 +65,7 @@ lazy_static! {
 pub fn init_idt() {
     println!("Initializing IDT...");
     use x86_64::instructions::tables::load_tss;
-    use x86_64::instructions::segmentation::{CS, Segment};
+    use x86_64::instructions::segmentation::{CS};
 
     GDT.0.load();
     unsafe {
@@ -101,6 +102,8 @@ pub struct PanicTechnicalInfo {
     cpu_flags: u64,
     stack_pointer: u64,
     stack_segment: u64,
+    memory_address: u64,
+    code: PageFaultErrorCode
 }
 
 /// @brief Implementation of the PanicTechnicalInfo struct
@@ -115,7 +118,9 @@ impl PanicTechnicalInfo {
             code_segment: 0,
             cpu_flags: 0,
             stack_pointer: 0,
-            stack_segment: 0
+            stack_segment: 0,
+            memory_address: 0,
+            code: PageFaultErrorCode::empty()
         }
     }
 }
@@ -140,28 +145,71 @@ extern "x86-interrupt" fn keyboard_interrupt_handler(
 extern "x86-interrupt" fn double_fault_handler(
     stack_frame: InterruptStackFrame, _error_code: u64) -> !
 {
-    panic!("DOUBLE_FAULT_CODE_{}\n{:#?}", _error_code, stack_frame);
+    // Create a new PanicTechnicalInfo
+    let mut panic_info = PanicTechnicalInfo::new();
+    // Populate
+    panic_info.instruction_pointer = stack_frame.instruction_pointer.as_u64();
+    panic_info.code_segment = stack_frame.code_segment;
+    panic_info.cpu_flags = stack_frame.cpu_flags;
+    panic_info.stack_pointer = stack_frame.stack_pointer.as_u64();
+    panic_info.stack_segment = stack_frame.stack_segment;
+
+    // Create arguments for the panic
+    knl_panic_str(Location::caller(), "DOUBLE FAULT", &panic_info);
+    panic!("Double fault");
+
+
 }
 
 /// @brief Processes an Overflow event (arithmetical)
 extern "x86-interrupt" fn overflow_handler(
     stack_frame: InterruptStackFrame)
 {
-    panic!("OVERFLOW_EXCEPTION\n{:#?}", stack_frame);
+    // Create a new PanicTechnicalInfo
+    let mut panic_info = PanicTechnicalInfo::new();
+    // Populate
+    panic_info.instruction_pointer = stack_frame.instruction_pointer.as_u64();
+    panic_info.code_segment = stack_frame.code_segment;
+    panic_info.cpu_flags = stack_frame.cpu_flags;
+    panic_info.stack_pointer = stack_frame.stack_pointer.as_u64();
+    panic_info.stack_segment = stack_frame.stack_segment;
+
+    // Create arguments for the panic
+    knl_panic_str(Location::caller(), "ARITH OVERFLOW EXCEPTION", &panic_info);
 }
 
 /// @brief Processes a Division by Zero event
 extern "x86-interrupt" fn division_handler(
     stack_frame: InterruptStackFrame)
 {
-    panic!("DIVISON_EXCEPTION\n{:#?}", stack_frame);
+    // Create a new PanicTechnicalInfo
+    let mut panic_info = PanicTechnicalInfo::new();
+    // Populate
+    panic_info.instruction_pointer = stack_frame.instruction_pointer.as_u64();
+    panic_info.code_segment = stack_frame.code_segment;
+    panic_info.cpu_flags = stack_frame.cpu_flags;
+    panic_info.stack_pointer = stack_frame.stack_pointer.as_u64();
+    panic_info.stack_segment = stack_frame.stack_segment;
+
+    // Create arguments for the panic
+    knl_panic_str(Location::caller(), "DIVISION EXCEPTION", &panic_info);
 }
 
 /// @brief Processes an Invalid Opcode event
 extern "x86-interrupt" fn invalid_opcode_handler(
     stack_frame: InterruptStackFrame)
 {
-    panic!("INVALID_OPCODE_EXCEPTION\n{:#?}", stack_frame);
+    // Create a new PanicTechnicalInfo
+    let mut panic_info = PanicTechnicalInfo::new();
+    // Populate
+    panic_info.instruction_pointer = stack_frame.instruction_pointer.as_u64();
+    panic_info.code_segment = stack_frame.code_segment;
+    panic_info.cpu_flags = stack_frame.cpu_flags;
+    panic_info.stack_pointer = stack_frame.stack_pointer.as_u64();
+    panic_info.stack_segment = stack_frame.stack_segment;
+
+    // Create arguments for the panic
+    knl_panic_str(Location::caller(), "INVALID OPCODE", &panic_info);
 }
 
 /// @brief Processes a Timer event. This is called every time the timer fires.
@@ -174,6 +222,28 @@ extern "x86-interrupt" fn timer_interrupt_handler(
         PICS.lock()
             .notify_end_of_interrupt(InterruptIndex::Timer.as_u8());
     }
+}
+
+/// @brief Processes a Page Fault event
+extern "x86-interrupt" fn page_fault_handler(
+    stack_frame: InterruptStackFrame,
+    error_code: PageFaultErrorCode)
+{
+    use x86_64::registers::control::Cr2;
+
+    // Create a new PanicTechnicalInfo
+    let mut panic_info = PanicTechnicalInfo::new();
+    // Populate
+    panic_info.instruction_pointer = stack_frame.instruction_pointer.as_u64();
+    panic_info.code_segment = stack_frame.code_segment;
+    panic_info.cpu_flags = stack_frame.cpu_flags;
+    panic_info.stack_pointer = stack_frame.stack_pointer.as_u64();
+    panic_info.stack_segment = stack_frame.stack_segment;
+    panic_info.memory_address = Cr2::read().as_u64();
+    panic_info.code = error_code;
+
+    // Create arguments for the panic
+    knl_panic_str(Location::caller(), "PAGE FAULT", &panic_info);
 }
 
 /**
@@ -208,6 +278,17 @@ fn get_newline_count(string: &str) -> usize {
     count
 }
 
+/// Location, str, techinfo overload, helps with convenience
+pub fn knl_panic_str(location: &Location, message: &'static str, stackFrame: &PanicTechnicalInfo)
+{
+    let x = &[message];
+    // Create arguments for the panic
+    let args = Arguments::new_v1(
+        x, &match () {
+            () => [],
+        });
+    knl_panic(Location::caller(), &args, stackFrame)
+}
 
 /**
  * @brief Processes a Panic event, this one can be called from anywhere
@@ -238,14 +319,13 @@ pub fn knl_panic(location: &Location, message: &Arguments, stackFrame: &PanicTec
         "Kernel Kablooey!",
         "Kernel Kablooey 2: Electric Boogaloo!",
         "Kernel Kablooey 3: The Reckoning!",
+        "MEDIC!", // The Scout, Team Fortress 2
+        "Oh, fiddlesticks, what now?", // Doctor Kleiner, Half-Life 2
+        "Doc, come on, man!", // The Scout, Team Fortress 2
+        "Don't Panic!", // The Hitchhiker's Guide to the Galaxy
         "Kernel Panic!",
         "Kernel Panic! (Not Clickbait)",
         "Kernel Panic! (Gone Wrong)",
-        // Reference titles
-        "MEDIC!", // The Scout, Team Fortress 2
-        "Doc, come on, man!", // The Scout, Team Fortress 2
-        "Oh, fiddlesticks, what now?", // Doctor Kleiner, Half-Life 2
-        "Don't Panic!", // The Hitchhiker's Guide to the Galaxy
     ];
 
     // Safest way to get a random number is to add up all the stack frame values, and use that as the seed.
@@ -281,7 +361,9 @@ pub fn knl_panic(location: &Location, message: &Arguments, stackFrame: &PanicTec
         stackFrame.code_segment,
         stackFrame.cpu_flags,
         stackFrame.stack_pointer,
-        stackFrame.stack_segment
+        stackFrame.stack_segment,
+        stackFrame.memory_address,
+        stackFrame.code
     );
 
     // Bios interrupt

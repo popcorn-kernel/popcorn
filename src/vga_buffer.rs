@@ -103,10 +103,10 @@ impl Writer {
         self.color_code = ColorCode::new(foreground, background);
     }
     fn new_line(&mut self) {
-        for row in 1..BUF_HEIGHT {
+        for row in 0..BUF_HEIGHT - 1 {
             for col in 0..BUF_WIDTH {
-                let character = self.buffer.chars[row][col].read();
-                self.buffer.chars[row - 1][col].write(character);
+                let character = self.buffer.chars[row + 1][col].read();
+                self.buffer.chars[row][col].write(character);
             }
         }
         self.clear_row(BUF_HEIGHT - 1);
