@@ -26,5 +26,5 @@ To fix the issue we need to limit what commands the normal user can use.
 
 
 ## Accepting And Declining Vulnerabilities
-Please act as professional as possible for use to accept your vulnerability report. Troll reports will be ignored.
+Please act as professional as possible for us to accept your vulnerability report. Troll reports will be ignored.
 How urgent is the vulnerability is also a major factor. If we see that the vulnerability is not major as other things, we will put it on hold.
