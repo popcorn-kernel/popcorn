@@ -1,6 +1,6 @@
 install:
 	cargo install bootimage
-
+	rustup component add llvm-tools-preview
 build:
 	cargo bootimage --target arch/x86_64-arch.json
 
@@ -12,8 +12,5 @@ clean:
 
 debug: build
 	bash -c "qemu-system-x86_64 -s -S -drive format=raw,file=target/x86_64-arch/debug/bootimage-popcorn.bin &"
-
-make test: build
-	cargo test
 
 .PHONY: build
