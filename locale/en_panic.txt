@@ -1,5 +1,5 @@
       An unrecoverable error has occurred, and the system must shut down.
-     You can submit an issue at https://github.com/popcorn-kernel/popcorn.
+     You can submit an issue at https://github.com/popcorn-kernel/popcorn/issues.
 
 ================================INSTRUCTIONS===================================
 If this is the first time you have seen this error, please reboot your system.
