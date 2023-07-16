@@ -13,7 +13,7 @@ To report a vulnerability, please open a new issue and tell us as much info as y
 1. Explain the vulnerability.
 2. Tell us how we can recreate the vulnerability.
 3. Tell us what was the machine you tested/found the vulnerability on.
-4. If you have fixing ideas, please share it with us
+4. If you have fixing ideas, please share it with us.
 
 For example:
 Title: able to run administrator commands from a non-root shell
