@@ -10,4 +10,7 @@ run: build
 clean:
 	cargo clean
 
+debug: build
+	bash -c "qemu-system-x86_64 -s -S -drive format=raw,file=target/x86_64-arch/debug/bootimage-popcorn.bin &"
+
 .PHONY: build

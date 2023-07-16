@@ -41,3 +41,24 @@ pub extern "C" fn memset(dst: *mut u8, c: i32, n: usize) -> *mut u8 {
     }
     dst
 }
+
+/**
+ * @brief Compare two blocks of memory
+ * @param s1 Pointer to the first block of memory
+ * @param s2 Pointer to the second block of memory
+ * @param n Number of bytes to compare
+ * @return 0 if the blocks are equal, nonzero otherwise
+ */
+#[no_mangle]
+pub extern "C" fn memcmp(s1: *const u8, s2: *const u8, n: usize) -> i32 {
+    let mut i = 0;
+    while i < n {
+        unsafe {
+            if *s1.add(i) != *s2.add(i) {
+                return 1;
+            }
+        }
+        i += 1;
+    }
+    0
+}

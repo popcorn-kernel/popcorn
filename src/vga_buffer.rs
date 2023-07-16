@@ -2,7 +2,7 @@ use spin::Mutex;
 use volatile::Volatile;
 use core::fmt;
 use lazy_static::lazy_static;
-
+use x86_64::instructions::interrupts;
 
 
 #[allow(dead_code)]
@@ -25,6 +25,7 @@ pub enum Color {
     Pink = 0xD,
     Yellow = 0xE,
     White = 0xF,
+
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -126,9 +127,8 @@ impl Writer {
     pub fn write_string(&mut self, s: &str) {
         for byte in s.bytes() {
             match byte {
-                // printable ASCII byte or newline
                 0x20..=0x7e | b'\n' => self.write_byte(byte),
-                _ => self.write_byte(0xFE)
+                _ => self.write_byte(0xfe),
             }
         }
     }
@@ -199,8 +199,10 @@ macro_rules! set_color {
  */
 #[doc(hidden)]
 pub fn _print(args: fmt::Arguments) {
-    use core::fmt::Write;
-    WRITER.lock().write_fmt(args).unwrap();
+    interrupts::without_interrupts(|| {
+        use core::fmt::Write;
+        WRITER.lock().write_fmt(args).unwrap();
+    });
 }
 
 /**
@@ -210,7 +212,9 @@ pub fn _print(args: fmt::Arguments) {
  */
 #[doc(hidden)]
 pub fn _clear_screen(color: Color) {
-    WRITER.lock().clear_screen(color);
+    interrupts::without_interrupts(|| {
+        WRITER.lock().clear_screen(color);
+    });
 }
 
 /**
@@ -221,5 +225,7 @@ pub fn _clear_screen(color: Color) {
  */
 #[doc(hidden)]
 pub fn _set_color(foreground: Color, background: Color) {
-    WRITER.lock().set_color(foreground, background);
+    interrupts::without_interrupts(|| {
+        WRITER.lock().set_color(foreground, background);
+    });
 }
