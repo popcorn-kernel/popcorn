@@ -1,42 +1,63 @@
 #![feature(panic_info_message)]
 #![no_std] // don't link the Rust standard library
 #![no_main] // disable all Rust-level entry points
-//#![reexport_test_harness_main = "test_main"] // re-export the test executor.
-//#![feature(custom_test_frameworks)] // use feature custom-test-frameworks.
-//#![test_runner(crate::test_runner)] // declare the test runner
-
-
+#![reexport_test_harness_main = "test_main"] // re-export the test executor.
+#![feature(custom_test_frameworks)] // use feature custom-test-frameworks.
+#![test_runner(crate::test_runner)] // declare the test runner
+#![feature(asm_const)]
+#![feature(abi_x86_interrupt)]
 #[cfg(all(feature = "alloc", not(feature = "std")))]
 extern crate alloc;
 #[cfg(feature = "std")]
 extern crate std as alloc;
 
-
 use core::arch::asm;
-use core::panic::{PanicInfo};
+use crate::misc::hlt_loop;
+
+pub mod interrupts;
 
 mod vga_buffer;
 mod memory;
+mod gdt;
 use crate::vga_buffer::Color;
+mod serial;
+mod misc;
 
-/**
- * @brief Processes a Panic event
- * @details This function is called when a panic occurs. It prints the panic message, and halts the system.
- * @param info Information about the panic
+pub fn init() {
+    // Set blink text mode to ON
+/*
+; Read I/O Address 0x03DA to reset index/data flip-flop
+	mov dx, 0x03DA
+	in al, dx
+	; Write index 0x30 to 0x03C0 to set register index to 0x30
+	mov dx, 0x03C0
+	mov al, 0x30
+	out dx, al
+	; Read from 0x03C1 to get register contents
+	inc dx
+	in al, dx
+	; Set Bit 3 to enable Blink
+	or al, 0x08
+	; Write to 0x03C0 to update register with changed value
+	dec dx
+	out dx, al
  */
-#[panic_handler]
-fn panic(info: &PanicInfo) -> ! {
-    // If there's something weird, and it don't look good, who you gonna call?
-    // PANIC BUSTERS!
+unsafe {
+        asm!("
+        mov dx, 0x03DA
+        in al, dx
+        mov dx, 0x03C0
+        mov al, 0x30
+        out dx, al
+        inc dx
+        in al, dx
+        or al, 0x08
+        dec dx
+        out dx, al
+        ");
+    }
 
-    // FYI, when the system panics, you want to do the LEAST amount of unsafe functionality.
-    clear_screen!(Color::DarkGray);
-
-    set_color!(Color::White, Color::DarkGray);
-
-    println!(include_str!("../locale/en_panic.txt"), info.location().unwrap(), info.message().unwrap());
-
-    loop {}
+    interrupts::init_interrupts();
 }
 
 /**
@@ -46,16 +67,18 @@ fn panic(info: &PanicInfo) -> ! {
  */
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
-    // Your operating system initialization code goes here
 
     // Print some information
     clear_screen!(Color::Black);
     set_color!(Color::White, Color::Black);
     println!("Welcome to the Popcorn kernel!");
+    serial_println!("Welcome to the Popcorn kernel!");
 
-    // Rest of your operating system code
-    loop {
-    }
+    // Initialize the kernel
+    init();
+
+    // Halt until the next interrupt
+    hlt_loop();
 }
 
 /**
@@ -64,6 +87,7 @@ pub extern "C" fn _start() -> ! {
  */
 pub fn shutdown()
 {
+
     clear_screen!(Color::Black);
     set_color!(Color::White, Color::Black);
     println!("Shutting down...");
@@ -71,5 +95,20 @@ pub fn shutdown()
     // Put deinitialization code here.
 
     // Shut down the kernel, and the computer.
-    unsafe { asm!("hlt"); }
+    hlt_loop();
+}
+
+#[cfg(test)]
+fn test_runner(tests: &[&dyn Fn()]) {
+    libc_println!("Running {} tests", tests.len());
+    for test in tests {
+        test();
+    }
+}
+
+#[test_case]
+fn trivial_assertion() {
+    print!("trivial assertion...");
+    assert!(1 == 1);
+    libc_println!("[ok]");
 }

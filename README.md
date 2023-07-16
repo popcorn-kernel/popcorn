@@ -45,6 +45,22 @@ Test thoroughly and ensure your changes do not introduce any regressions.
 
 Submit a pull request, describing your changes and their purpose clearly.
 
+## Getting Started
+### Prerequisites
+- Rust/Cargo
+- QEMU
+- Make
+
+### Building and Running
+Before building the kernel, you must first install the required dependencies. To install the dependencies, run the following command:
+```make install```
+
+To build the kernel, run the following command:
+```make build```
+
+To run the kernel in QEMU, run the following command:
+```make run```
+
 ---
 
 <div style="width: 75%; margin: 0 auto;">

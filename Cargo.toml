@@ -3,7 +3,7 @@ name = "popcorn"
 version = "0.1.0"
 edition = "2021"
 authors = ["The Popcorn Team"]
-license = "GNU General Public License"
+license = "MIT License"
 
 [profile.dev]
 panic = "abort"
@@ -18,6 +18,8 @@ volatile = "0.2.6"
 spin = "0.5.2"
 bootloader = "0.9.7"
 x86_64 = "0.14.1"
+pic8259 = "0.10.1"
+uart_16550 = "0.2.0"
 
 [dependencies.lazy_static]
 version = "1.0"
