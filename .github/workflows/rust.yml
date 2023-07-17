@@ -30,14 +30,6 @@ jobs:
             target: aarch64-unknown-linux-gnu
             rust: nightly
 
-          - os: windows-latest
-            target: x86_64-pc-windows-msvc
-            rust: nightly
-
-          - os: macos-apple-silicon-latest
-            target: aarch64-apple-darwin
-            rust: nightly
-
     steps:
     - uses: actions/checkout@v2
     - name: Install rust toolchain
@@ -65,19 +57,6 @@ jobs:
           - os: ubuntu-latest
             target: i686-unknown-linux-gnu
             rust: nightly
-
-          - os: ubuntu-latest
-            target: aarch64-unknown-linux-gnu
-            rust: nightly
-
-          - os: windows-latest
-            target: x86_64-pc-windows-msvc
-            rust: nightly
-
-          - os: macos-apple-silicon-latest
-            target: aarch64-apple-darwin
-            rust: nightly
-
     steps:
     - uses: actions/checkout@v2
     - name: Install rust toolchain
