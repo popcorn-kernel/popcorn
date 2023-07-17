@@ -13,12 +13,12 @@ use alloc::boxed::Box;
 use alloc::rc::Rc;
 use alloc::vec;
 use alloc::vec::Vec;
+use bootloader::{entry_point, BootInfo};
 use core::panic::PanicInfo;
-use bootloader::{BootInfo, entry_point};
-use x86_64::VirtAddr;
-use popcorn::{allocation, clear_screen, init, print, println, serial_println, set_color};
-use popcorn::memory::{BootInfoFrameAllocator, init_pagetable};
+use popcorn::memory::{init_pagetable, BootInfoFrameAllocator};
 use popcorn::vga_buffer::Color;
+use popcorn::{allocation, clear_screen, init, print, println, serial_println, set_color};
+use x86_64::VirtAddr;
 entry_point!(kernel_main);
 
 /**
@@ -38,16 +38,12 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
     // Initialize the kernel
     init();
 
-
     let phys_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
     let mut mapper = unsafe { init_pagetable(phys_mem_offset) };
-    let mut frame_allocator = unsafe {
-        BootInfoFrameAllocator::init(&boot_info.memory_map)
-    };
+    let mut frame_allocator = unsafe { BootInfoFrameAllocator::init(&boot_info.memory_map) };
 
     // new
-    allocation::init_heap(&mut mapper, &mut frame_allocator)
-        .expect("heap initialization failed");
+    allocation::init_heap(&mut mapper, &mut frame_allocator).expect("heap initialization failed");
 
     let heap_value = Box::new(41);
     println!("heap_value at {:p}", heap_value);
@@ -62,9 +58,15 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
     // create a reference counted vector -> will be freed when count reaches 0
     let reference_counted = Rc::new(vec![1, 2, 3]);
     let cloned_reference = reference_counted.clone();
-    println!("current reference count is {}", Rc::strong_count(&cloned_reference));
+    println!(
+        "current reference count is {}",
+        Rc::strong_count(&cloned_reference)
+    );
     core::mem::drop(reference_counted);
-    println!("reference count is {} now", Rc::strong_count(&cloned_reference));
+    println!(
+        "reference count is {} now",
+        Rc::strong_count(&cloned_reference)
+    );
 
     // […] call `test_main` in test context
     println!("It did not crash!");
@@ -72,7 +74,6 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
     // Halt until the next interrupt
     popcorn::hlt_loop();
 }
-
 
 #[test_case]
 fn trivial_assertion() {

@@ -1,8 +1,8 @@
+use crate::vga_buffer::Color;
+use crate::{clear_screen, hlt_loop, print, println, serial_println, set_color};
 use core::fmt::Arguments;
 use core::panic::Location;
 use x86_64::structures::idt::PageFaultErrorCode;
-use crate::{clear_screen, hlt_loop, print, println, serial_println, set_color};
-use crate::vga_buffer::Color;
 
 // If there's something weird, and it don't look good, who you gonna call?
 
@@ -32,7 +32,7 @@ pub struct PanicTechnicalInfo {
     pub(crate) stack_pointer: u64,
     pub(crate) stack_segment: u64,
     pub(crate) memory_address: u64,
-    pub(crate) code: PageFaultErrorCode
+    pub(crate) code: PageFaultErrorCode,
 }
 
 /// @brief Implementation of the PanicTechnicalInfo struct
@@ -49,26 +49,26 @@ impl PanicTechnicalInfo {
             stack_pointer: 0,
             stack_segment: 0,
             memory_address: 0,
-            code: PageFaultErrorCode::empty()
+            code: PageFaultErrorCode::empty(),
         }
     }
 }
 
 /// Location, str, techinfo overload, helps with convenience
-pub fn knl_panic_str(location: &Location, message: &'static str, stackFrame: &PanicTechnicalInfo)
-{
+pub fn knl_panic_str(location: &Location, message: &'static str, stackFrame: &PanicTechnicalInfo) {
     let x = &[message];
     // Create arguments for the panic
     let args = Arguments::new_v1(
-        x, &match () {
+        x,
+        &match () {
             () => [],
-        });
+        },
+    );
     knl_panic(Location::caller(), &args, stackFrame)
 }
 
 /// Get the title the Kernel Panic should use.
-fn knl_panic_get_title(stack_frame: &PanicTechnicalInfo) -> &'static str
-{
+fn knl_panic_get_title(stack_frame: &PanicTechnicalInfo) -> &'static str {
     // Randomly select a title, for added fun
     let titles: [&str; 12] = [
         // Silly titles
@@ -77,29 +77,32 @@ fn knl_panic_get_title(stack_frame: &PanicTechnicalInfo) -> &'static str
         "Kernel Kablooey!",
         "Kernel Kablooey 2: Electric Boogaloo!",
         "Kernel Kablooey 3: The Reckoning!",
-        "MEDIC!", // The Scout, Team Fortress 2
+        "MEDIC!",                      // The Scout, Team Fortress 2
         "Oh, fiddlesticks, what now?", // Doctor Kleiner, Half-Life 2
-        "Doc, come on, man!", // The Scout, Team Fortress 2
-        "Don't Panic!", // The Hitchhiker's Guide to the Galaxy
+        "Doc, come on, man!",          // The Scout, Team Fortress 2
+        "Don't Panic!",                // The Hitchhiker's Guide to the Galaxy
         "Kernel Panic!",
         "Kernel Panic! (Not Clickbait)",
         "Kernel Panic! (Gone Wrong)",
     ];
 
     // Safest way to get a random number is to add up all the stack frame values, and use that as the seed.
-    let mut x: u64 =
-        stack_frame.stack_segment
-            + stack_frame.stack_pointer
-            + stack_frame.code_segment
-            + stack_frame.cpu_flags
-            + stack_frame.instruction_pointer;
+    let mut x: u64 = stack_frame.stack_segment
+        + stack_frame.stack_pointer
+        + stack_frame.code_segment
+        + stack_frame.cpu_flags
+        + stack_frame.instruction_pointer;
 
     let title: &str = titles[(x % titles.len() as u64) as usize];
     &title
 }
 
-fn knl_panic_print(title: &str, location: &Location, message: &Arguments, stackFrame: &PanicTechnicalInfo)
-{
+fn knl_panic_print(
+    title: &str,
+    location: &Location,
+    message: &Arguments,
+    stackFrame: &PanicTechnicalInfo,
+) {
     let title_padding: usize = (80 / 2) - (title.len() / 2);
 
     // Render
@@ -149,8 +152,7 @@ pub fn knl_panic(location: &Location, message: &Arguments, stackFrame: &PanicTec
     // Check result, if empty or null, use default title
     if title.is_empty() {
         knl_panic_print("Kernel Panic!", location, message, stackFrame);
-    }
-    else {
+    } else {
         knl_panic_print(title, location, message, stackFrame);
     }
 

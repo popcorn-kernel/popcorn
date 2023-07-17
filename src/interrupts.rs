@@ -1,15 +1,14 @@
-use crate::{exit_qemu, hlt_loop, println, QemuExitCode, serial_println};
-use x86_64::structures::idt::{InterruptDescriptorTable};
-use lazy_static::lazy_static;
-use x86_64::instructions::segmentation::Segment;
 use crate::gdt::{DOUBLE_FAULT_IST_INDEX, GDT};
+use crate::interrupt_handlers;
+use crate::{exit_qemu, hlt_loop, println, serial_println, QemuExitCode};
+use lazy_static::lazy_static;
 use pic8259::ChainedPics;
 use spin;
-use crate::interrupt_handlers;
+use x86_64::instructions::segmentation::Segment;
+use x86_64::structures::idt::InterruptDescriptorTable;
 
 pub const PIC_1_OFFSET: u8 = 32;
 pub const PIC_2_OFFSET: u8 = PIC_1_OFFSET + 8;
-
 
 pub static PICS: spin::Mutex<ChainedPics> =
     spin::Mutex::new(unsafe { ChainedPics::new(PIC_1_OFFSET, PIC_2_OFFSET) });
@@ -60,8 +59,8 @@ lazy_static! {
  */
 pub fn init_idt() {
     println!("Initializing IDT...");
+    use x86_64::instructions::segmentation::CS;
     use x86_64::instructions::tables::load_tss;
-    use x86_64::instructions::segmentation::{CS};
 
     GDT.0.load();
     unsafe {

@@ -1,15 +1,15 @@
+use crate::{memory, println};
+use bootloader::bootinfo::MemoryMap;
 use bootloader::BootInfo;
 /**
  * @file memory.rs
  * @brief Memory functions
  * @details This file contains functions for memory manipulation and management.
  */
-
-
-
-use x86_64::{PhysAddr, structures::paging::{Page, PhysFrame, Mapper, Size4KiB, FrameAllocator}, VirtAddr};
-use crate::{memory, println};
-use bootloader::bootinfo::MemoryMap;
+use x86_64::{
+    structures::paging::{FrameAllocator, Mapper, Page, PhysFrame, Size4KiB},
+    PhysAddr, VirtAddr,
+};
 
 /// A FrameAllocator that returns usable frames from the bootloader's memory map.
 pub struct BootInfoFrameAllocator {
@@ -39,11 +39,9 @@ impl BootInfoFrameAllocator {
     fn usable_frames(&self) -> impl Iterator<Item = PhysFrame> {
         // get usable regions from memory map
         let regions = self.memory_map.iter();
-        let usable_regions = regions
-            .filter(|r| r.region_type == MemoryRegionType::Usable);
+        let usable_regions = regions.filter(|r| r.region_type == MemoryRegionType::Usable);
         // map each region to its address range
-        let addr_ranges = usable_regions
-            .map(|r| r.range.start_addr()..r.range.end_addr());
+        let addr_ranges = usable_regions.map(|r| r.range.start_addr()..r.range.end_addr());
         // transform to an iterator of frame start addresses
         let frame_addresses = addr_ranges.flat_map(|r| r.step_by(4096));
         // create `PhysFrame` types from the start addresses
@@ -150,8 +148,7 @@ pub unsafe extern "C" fn memcmp(s1: *const u8, s2: *const u8, n: usize) -> i32 {
  * @param phys_mem_offset The offset of the physical memory
  * @return A mutable reference to the active level 4 page table
  */
-pub unsafe fn active_lv4_table(phys_mem_offset: VirtAddr) -> &'static mut PageTable
-{
+pub unsafe fn active_lv4_table(phys_mem_offset: VirtAddr) -> &'static mut PageTable {
     use x86_64::registers::control::Cr3;
 
     let (lv4_table_frame, _) = Cr3::read();
@@ -163,21 +160,20 @@ pub unsafe fn active_lv4_table(phys_mem_offset: VirtAddr) -> &'static mut PageTa
     &mut *page_table_ptr // unsafe
 }
 /// Translates the given virtual address to the mapped physical address, or `None` if the address is not mapped.
-pub unsafe fn translate_addr(addr: VirtAddr, physical_memory_offset: VirtAddr)
-                             -> Option<PhysAddr>
-{
+pub unsafe fn translate_addr(addr: VirtAddr, physical_memory_offset: VirtAddr) -> Option<PhysAddr> {
     translate_addr_inner(addr, physical_memory_offset)
 }
 
 /// @brief Private function that is called by `translate_addr`.
-fn translate_addr_inner(addr: VirtAddr, physical_memory_offset: VirtAddr)
-                        -> Option<PhysAddr>
-{
+fn translate_addr_inner(addr: VirtAddr, physical_memory_offset: VirtAddr) -> Option<PhysAddr> {
     // read the active level 4 frame from the CR3 register
     let (level_4_table_frame, _) = Cr3::read();
 
     let table_indexes = [
-        addr.p4_index(), addr.p3_index(), addr.p2_index(), addr.p1_index()
+        addr.p4_index(),
+        addr.p3_index(),
+        addr.p2_index(),
+        addr.p1_index(),
     ];
     let mut frame = level_4_table_frame;
 
@@ -186,7 +182,7 @@ fn translate_addr_inner(addr: VirtAddr, physical_memory_offset: VirtAddr)
         // convert the frame into a page table reference
         let virt = physical_memory_offset + frame.start_address().as_u64();
         let table_ptr: *const PageTable = virt.as_ptr();
-        let table = unsafe {&*table_ptr};
+        let table = unsafe { &*table_ptr };
 
         // read the page table entry and update `frame`
         let entry = &table[index];
@@ -201,8 +197,8 @@ fn translate_addr_inner(addr: VirtAddr, physical_memory_offset: VirtAddr)
     Some(frame.start_address() + u64::from(addr.page_offset()))
 }
 
-use x86_64::structures::paging::{OffsetPageTable, PageTable};
 use x86_64::structures::paging::page_table::FrameError;
+use x86_64::structures::paging::{OffsetPageTable, PageTable};
 
 /// Initialize a new OffsetPageTable.
 pub unsafe fn init_pagetable(physical_memory_offset: VirtAddr) -> OffsetPageTable<'static> {

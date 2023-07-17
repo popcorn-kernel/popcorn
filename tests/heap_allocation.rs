@@ -12,10 +12,10 @@ extern crate alloc;
 
 use alloc::boxed::Box;
 use alloc::vec::Vec;
+use bootloader::{entry_point, BootInfo};
 use core::panic::PanicInfo;
-use bootloader::{BootInfo, entry_point};
 use popcorn::allocation::HEAP_SIZE;
-use popcorn::memory::{BootInfoFrameAllocator, init_pagetable};
+use popcorn::memory::{init_pagetable, BootInfoFrameAllocator};
 
 entry_point!(main);
 

@@ -9,32 +9,28 @@
 
 extern crate alloc;
 
-use core::panic::PanicInfo;
 use crate::vga_buffer::Color;
-
+use core::panic::PanicInfo;
 
 pub mod allocation;
 pub mod gdt;
-pub mod interrupts;
-pub mod misc;
 pub mod interrupt_handlers;
-pub mod panic;
+pub mod interrupts;
 pub mod memory;
+pub mod misc;
+pub mod panic;
 pub mod serial;
 pub mod vga_buffer;
 
 pub fn init() {
     interrupts::init_interrupts();
-
 }
 
 /**
  * @brief Shuts down the kernel.
  * @details This function clears the screen, then shuts down the kernel, then shuts down the computer.
  */
-pub fn shutdown()
-{
-
+pub fn shutdown() {
     clear_screen!(Color::Black);
     set_color!(Color::White, Color::Black);
     println!("Shutting down...");
@@ -50,8 +46,8 @@ pub trait Testable {
 }
 
 impl<T> Testable for T
-    where
-        T: Fn(),
+where
+    T: Fn(),
 {
     fn run(&self) {
         serial_print!("{}...\t", core::any::type_name::<T>());
@@ -96,8 +92,6 @@ pub fn hlt_loop() -> ! {
         x86_64::instructions::hlt();
     }
 }
-
-
 
 #[cfg(test)]
 use bootloader::{entry_point, BootInfo};

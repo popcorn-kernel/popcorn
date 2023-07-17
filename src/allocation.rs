@@ -40,9 +40,7 @@ pub fn init_heap(
             .allocate_frame()
             .ok_or(MapToError::FrameAllocationFailed)?;
         let flags = PageTableFlags::PRESENT | PageTableFlags::WRITABLE;
-        unsafe {
-            mapper.map_to(page, frame, flags, frame_allocator)?.flush()
-        };
+        unsafe { mapper.map_to(page, frame, flags, frame_allocator)?.flush() };
     }
 
     unsafe {
@@ -56,13 +54,12 @@ pub unsafe trait GlobalAlloc {
     unsafe fn alloc(&self, layout: Layout) -> *mut u8;
     unsafe fn dealloc(&self, ptr: *mut u8, layout: Layout);
 
-    unsafe fn alloc_zeroed(&self, layout: Layout) -> *mut u8 { return null_mut(); }
-    unsafe fn realloc(
-        &self,
-        ptr: *mut u8,
-        layout: Layout,
-        new_size: usize
-    ) -> *mut u8 { return null_mut(); }
+    unsafe fn alloc_zeroed(&self, layout: Layout) -> *mut u8 {
+        return null_mut();
+    }
+    unsafe fn realloc(&self, ptr: *mut u8, layout: Layout, new_size: usize) -> *mut u8 {
+        return null_mut();
+    }
 }
 
 use linked_list_allocator::LockedHeap;
