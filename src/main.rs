@@ -95,5 +95,5 @@ fn trivial_assertion() {
     assert_eq!(1, 1);
 }
 
-/*'d like to interject for a moment: what you are referring to as Popcorn, is in fact,
- * TRANS/Popcorn, or as I have recetly taken to calling it, TRANS plus Popcorn */
+/*I'd like to interject for a moment: what you are referring to as Popcorn, is in fact,
+TRANS/Popcorn, or as I have recetly taken to calling it, TRANS plus Popcorn */
