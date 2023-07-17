@@ -1,35 +1,24 @@
-#![feature(panic_info_message)]
 #![no_std] // don't link the Rust standard library
+#![feature(panic_info_message)]
 #![no_main] // disable all Rust-level entry points
 #![reexport_test_harness_main = "test_main"] // re-export the test executor.
 #![feature(custom_test_frameworks)] // use feature custom-test-frameworks.
-#![test_runner(crate::test_runner)] // declare the test runner
+#![test_runner(popcorn::test_runner)] // declare the test runner
 #![feature(asm_const)]
 #![feature(abi_x86_interrupt)]
 #![feature(fmt_internals)]
-#[cfg(all(feature = "alloc", not(feature = "std")))]
+
 extern crate alloc;
-#[cfg(feature = "std")]
-extern crate std as alloc;
-
-use x86_64::registers::control::Cr3;
-use crate::misc::hlt_loop;
-
-pub mod interrupts;
-
-mod vga_buffer;
-mod memory;
-mod gdt;
-use crate::vga_buffer::Color;
-mod serial;
-mod misc;
-
-pub fn init() {
-    interrupts::init_interrupts();
-}
-
+use alloc::boxed::Box;
+use alloc::rc::Rc;
+use alloc::vec;
+use alloc::vec::Vec;
+use core::panic::PanicInfo;
 use bootloader::{BootInfo, entry_point};
-
+use x86_64::VirtAddr;
+use popcorn::{allocation, clear_screen, init, print, println, serial_println, set_color};
+use popcorn::memory::{BootInfoFrameAllocator, init_pagetable};
+use popcorn::vga_buffer::Color;
 entry_point!(kernel_main);
 
 /**
@@ -49,45 +38,43 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
     // Initialize the kernel
     init();
 
-    // Page table test
-    let (lv4_pagetable, _) = Cr3::read();
-    println!("lv4_pagetable at: {:p}", lv4_pagetable.start_address());
 
+    let phys_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
+    let mut mapper = unsafe { init_pagetable(phys_mem_offset) };
+    let mut frame_allocator = unsafe {
+        BootInfoFrameAllocator::init(&boot_info.memory_map)
+    };
 
+    // new
+    allocation::init_heap(&mut mapper, &mut frame_allocator)
+        .expect("heap initialization failed");
+
+    let heap_value = Box::new(41);
+    println!("heap_value at {:p}", heap_value);
+
+    // create a dynamically sized vector
+    let mut vec = Vec::new();
+    for i in 0..500 {
+        vec.push(i);
+    }
+    println!("vec at {:p}", vec.as_slice());
+
+    // create a reference counted vector -> will be freed when count reaches 0
+    let reference_counted = Rc::new(vec![1, 2, 3]);
+    let cloned_reference = reference_counted.clone();
+    println!("current reference count is {}", Rc::strong_count(&cloned_reference));
+    core::mem::drop(reference_counted);
+    println!("reference count is {} now", Rc::strong_count(&cloned_reference));
+
+    // […] call `test_main` in test context
+    println!("It did not crash!");
 
     // Halt until the next interrupt
-    hlt_loop();
+    popcorn::hlt_loop();
 }
 
-
-/**
- * @brief Shuts down the operating system
- * @details This function clears the screen, then shuts down the kernel, then shuts down the computer.
- */
-pub fn shutdown()
-{
-
-    clear_screen!(Color::Black);
-    set_color!(Color::White, Color::Black);
-    println!("Shutting down...");
-
-    // Put deinitialization code here.
-
-    // Shut down the kernel, and the computer.
-    hlt_loop();
-}
-
-#[cfg(test)]
-fn test_runner(tests: &[&dyn Fn()]) {
-    libc_println!("Running {} tests", tests.len());
-    for test in tests {
-        test();
-    }
-}
 
 #[test_case]
 fn trivial_assertion() {
-    print!("trivial assertion...");
-    assert!(1 == 1);
-    libc_println!("[ok]");
+    assert_eq!(1, 1);
 }
