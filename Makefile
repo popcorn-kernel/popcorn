@@ -1,3 +1,4 @@
+# Builds the project 
 build:
 	cargo bootimage --target arch/x86_64-arch.json
 
