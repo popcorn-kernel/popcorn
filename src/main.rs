@@ -3,7 +3,7 @@
 #![no_main] // disable all Rust-level entry points
 #![reexport_test_harness_main = "test_main"] // re-export the test executor.
 #![feature(custom_test_frameworks)] // use feature custom-test-frameworks.
-#![test_runner(popcorn::test_runner)] // declare the test runner
+#![test_runner(popcorn::testutils::test_runner)] // declare the test runner
 #![feature(asm_const)]
 #![feature(abi_x86_interrupt)]
 #![feature(fmt_internals)]
@@ -87,7 +87,7 @@ fn panic(info: &PanicInfo) -> ! {
 #[cfg(test)]
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
-    popcorn::test_panic_handler(info)
+    popcorn::testutils::test_panic_handler(info)
 }
 
 #[test_case]
