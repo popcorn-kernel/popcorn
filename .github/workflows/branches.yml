@@ -7,7 +7,8 @@ jobs:
   delete-branch:
     runs-on: ubuntu-latest
     steps:
-      - name: delete branch
-        uses: SvanBoxel/delete-merged-branch@main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Delete closed PR branch
+        uses: dawidd6/action-delete-branch@v3
+        with:
+          github_token: ${{github.token}}
+          numbers: ${{github.event.pull_request.number}} 
