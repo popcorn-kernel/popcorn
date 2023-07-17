@@ -34,7 +34,6 @@ lazy_static! {
     };
 }
 
-
 pub struct Selectors {
     pub(crate) code_selector: SegmentSelector,
     pub(crate) tss_selector: SegmentSelector,

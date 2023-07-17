@@ -1,9 +1,8 @@
-use spin::Mutex;
-use volatile::Volatile;
 use core::fmt;
 use lazy_static::lazy_static;
+use spin::Mutex;
+use volatile::Volatile;
 use x86_64::instructions::interrupts;
-
 
 #[allow(dead_code)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -25,7 +24,6 @@ pub enum Color {
     Pink = 0xD,
     Yellow = 0xE,
     White = 0xF,
-
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -48,13 +46,13 @@ const BUF_WIDTH: usize = 80;
 
 #[repr(transparent)]
 struct Buffer {
-        chars: [[Volatile<ScreenChar>; BUF_WIDTH]; BUF_HEIGHT],
+    chars: [[Volatile<ScreenChar>; BUF_WIDTH]; BUF_HEIGHT],
 }
 
 pub struct Writer {
-        column_position: usize,
-        color_code: ColorCode,
-        buffer: &'static mut Buffer,
+    column_position: usize,
+    color_code: ColorCode,
+    buffer: &'static mut Buffer,
 }
 
 impl Writer {
@@ -87,7 +85,7 @@ impl Writer {
     pub fn clear_screen(&mut self, color: Color) {
         let blank = ScreenChar {
             ascii_character: b' ',
-            color_code: ColorCode::new(color, color)
+            color_code: ColorCode::new(color, color),
         };
 
         for row in 0..BUF_HEIGHT {
@@ -117,7 +115,7 @@ impl Writer {
         let blank = ScreenChar {
             ascii_character: b' ',
             color_code: self.color_code,
-         };
+        };
 
         for col in 0..BUF_WIDTH {
             self.buffer.chars[row][col].write(blank);
@@ -136,17 +134,17 @@ impl Writer {
 
 impl fmt::Write for Writer {
     fn write_str(&mut self, s: &str) -> fmt::Result {
-         self.write_string(s);
-         Ok(())
+        self.write_string(s);
+        Ok(())
     }
 }
 
 lazy_static! {
-        pub static ref WRITER: Mutex<Writer> = Mutex::new(Writer {
-                    column_position: 0,
-                    color_code: ColorCode::new(Color::Yellow, Color::Black),
-                    buffer: unsafe { &mut *(0xb8000 as *mut Buffer) },
-        });
+    pub static ref WRITER: Mutex<Writer> = Mutex::new(Writer {
+        column_position: 0,
+        color_code: ColorCode::new(Color::Yellow, Color::Black),
+        buffer: unsafe { &mut *(0xb8000 as *mut Buffer) },
+    });
 }
 
 // macros
@@ -156,7 +154,7 @@ lazy_static! {
 /// Accepts variable number of arguments for formatting.
 #[macro_export]
 macro_rules! print {
-    ($($arg:tt)*) => ($crate::vga_buffer::_print(format_args!($($arg)*)));
+    ($($arg:tt)*) => ($crate::system::vga_buffer::_print(format_args!($($arg)*)));
 }
 
 /// Prints to the VGA text buffer through the global `WRITER` instance,
@@ -177,7 +175,7 @@ macro_rules! println {
 #[macro_export]
 macro_rules! clear_screen {
     ($arg:expr) => {
-        $crate::vga_buffer::_clear_screen($arg);
+        $crate::system::vga_buffer::_clear_screen($arg);
     };
 }
 
@@ -187,7 +185,9 @@ macro_rules! clear_screen {
 /// The first argument is the foreground color, the second is the background color.
 #[macro_export]
 macro_rules! set_color {
-    ($foreground:expr, $background:expr) => ($crate::vga_buffer::_set_color($foreground, $background));
+    ($foreground:expr, $background:expr) => {
+        $crate::system::vga_buffer::_set_color($foreground, $background)
+    };
 }
 
 // private functions

@@ -1,33 +1,36 @@
 [package]
 name = "popcorn"
 version = "0.1.0"
-edition = "2021"
 authors = ["The Popcorn Team"]
-license = "MIT License"
+edition = "2021"
 
-[profile.dev]
-panic = "abort"
+#[[test]]
+#name = "should_panic"
+#harness = false
 
-[profile.release]
-panic = "abort"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[[test]]
+name = "stack_overflow"
+harness = false
 
 [dependencies]
+bootloader = { version = "0.9.8", features = ["map_physical_memory"]}
 volatile = "0.2.6"
 spin = "0.5.2"
-bootloader = "0.9.7"
-x86_64 = "0.14.1"
-pic8259 = "0.10.1"
+x86_64 = "0.14.2"
 uart_16550 = "0.2.0"
+pic8259 = "0.10.1"
+pc-keyboard = "0.5.0"
+linked_list_allocator = "0.9.0"
 
 [dependencies.lazy_static]
 version = "1.0"
 features = ["spin_no_std"]
 
 
-
 [package.metadata.bootimage]
-build-command = ["build"]
-test-args = ["-device", "isa-debug-exit,iobase=0xf4,iosize=0x04"]
-run-command = ["qemu-system-x86_64", "-drive", "format=raw,file={}"]
+test-args = [
+    "-device", "isa-debug-exit,iobase=0xf4,iosize=0x04", "-serial", "stdio",
+    "-display", "none"
+]
+test-success-exit-code = 33         # (0x10 << 1) | 1
+test-timeout = 300
