@@ -94,7 +94,7 @@ unsafe impl FrameAllocator<Size4KiB> for EmptyFrameAllocator {
  * @return Pointer to the destination memory
  */
 #[no_mangle]
-pub extern "C" fn memcpy(dst: *mut u8, src: *const u8, n: usize) -> *mut u8 {
+pub unsafe extern "C" fn memcpy(dst: *mut u8, src: *const u8, n: usize) -> *mut u8 {
     let mut i = 0;
     while i < n {
         unsafe {
@@ -113,7 +113,7 @@ pub extern "C" fn memcpy(dst: *mut u8, src: *const u8, n: usize) -> *mut u8 {
  * @return Pointer to the memory
  */
 #[no_mangle]
-pub extern "C" fn memset(dst: *mut u8, c: i32, n: usize) -> *mut u8 {
+pub unsafe extern "C" fn memset(dst: *mut u8, c: i32, n: usize) -> *mut u8 {
     let mut i = 0;
     while i < n {
         unsafe {
@@ -132,7 +132,7 @@ pub extern "C" fn memset(dst: *mut u8, c: i32, n: usize) -> *mut u8 {
  * @return 0 if the blocks are equal, nonzero otherwise
  */
 #[no_mangle]
-pub extern "C" fn memcmp(s1: *const u8, s2: *const u8, n: usize) -> i32 {
+pub unsafe extern "C" fn memcmp(s1: *const u8, s2: *const u8, n: usize) -> i32 {
     let mut i = 0;
     while i < n {
         unsafe {
