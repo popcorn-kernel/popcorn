@@ -1,15 +1,14 @@
-use crate::interrupts::{InterruptIndex, PICS};
-use crate::panic::{knl_panic, knl_panic_str, PanicTechnicalInfo};
-use core::panic::{Location, PanicInfo};
-use x86_64::instructions::segmentation::Segment;
+use core::panic::Location;
 use x86_64::structures::idt::{InterruptStackFrame, PageFaultErrorCode};
+use crate::system::interrupts::{InterruptIndex, PICS};
+use crate::system::panic::{knl_panic_str, PanicTechnicalInfo};
 
 /// @brief Handles a keyboard event, such as a key press
 pub extern "x86-interrupt" fn keyboard_interrupt_handler(_stack_frame: InterruptStackFrame) {
     use x86_64::instructions::port::Port;
 
     let mut port = Port::new(0x60);
-    let scancode: u8 = unsafe { port.read() };
+    let _scancode: u8 = unsafe { port.read() };
     // TODO: Put scancode processing here
 
     unsafe {
@@ -111,29 +110,4 @@ pub extern "x86-interrupt" fn page_fault_handler(
 
     // Create arguments for the panic
     knl_panic_str(Location::caller(), "PAGE FAULT", &panic_info);
-}
-
-/**
- * @brief Processes a Panic event
- * @details This function is called when a panic occurs. It prints the panic message, and halts the system.
- * @param info Information about the panic
- */
-#[cfg(not(test))]
-#[panic_handler]
-fn panic(info: &PanicInfo) -> ! {
-    // Create stack frame
-    let mut stack_frame: PanicTechnicalInfo = PanicTechnicalInfo::new();
-
-    // Fill stack tech info
-    stack_frame.instruction_pointer = x86_64::registers::control::Cr2::read().as_u64();
-    stack_frame.code_segment = x86_64::instructions::segmentation::CS::get_reg().0 as u64;
-    stack_frame.cpu_flags = x86_64::registers::rflags::read_raw();
-    stack_frame.stack_pointer = x86_64::registers::control::Cr2::read().as_u64();
-    stack_frame.stack_segment = x86_64::instructions::segmentation::SS::get_reg().0 as u64;
-
-    knl_panic(
-        info.location().unwrap(),
-        info.message().unwrap(),
-        &stack_frame,
-    );
 }

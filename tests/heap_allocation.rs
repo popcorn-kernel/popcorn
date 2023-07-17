@@ -1,36 +1,36 @@
-#![no_std] // don't link the Rust standard library
-#![feature(panic_info_message)]
-#![no_main] // disable all Rust-level entry points
-#![reexport_test_harness_main = "test_main"] // re-export the test executor.
-#![feature(custom_test_frameworks)] // use feature custom-test-frameworks.
-#![test_runner(popcorn::test_runner)] // declare the test runner
-#![feature(asm_const)]
-#![feature(abi_x86_interrupt)]
-#![feature(fmt_internals)]
+#![no_std]
+#![no_main]
+#![feature(custom_test_frameworks)]
+#![test_runner(popcorn::testutils::test_runner)]
+#![reexport_test_harness_main = "test_main"]
 
 extern crate alloc;
-
 use alloc::boxed::Box;
 use alloc::vec::Vec;
 use bootloader::{entry_point, BootInfo};
 use core::panic::PanicInfo;
-use popcorn::allocation::HEAP_SIZE;
-use popcorn::memory::{init_pagetable, BootInfoFrameAllocator};
+use popcorn::{serial_println, testutils};
+use popcorn::system::allocation;
+use popcorn::system::allocation::HEAP_SIZE;
+use popcorn::system::memory::{BootInfoFrameAllocator, init_pagetable};
+use popcorn::testutils::QemuExitCode;
 
 entry_point!(main);
 
 fn main(boot_info: &'static BootInfo) -> ! {
-    use blog_os::allocator;
-    use blog_os::memory::{self, BootInfoFrameAllocator};
     use x86_64::VirtAddr;
+    serial_println!("Heap allocation test");
 
     popcorn::init();
-    let phys_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
+    let addr = boot_info.physical_memory_offset;
+    let phys_mem_offset = VirtAddr::new(addr);
     let mut mapper = unsafe { init_pagetable(phys_mem_offset) };
     let mut frame_allocator = unsafe { BootInfoFrameAllocator::init(&boot_info.memory_map) };
-    allocator::init_heap(&mut mapper, &mut frame_allocator).expect("heap initialization failed");
+    allocation::init_heap(&mut mapper, &mut frame_allocator).expect("heap initialization failed");
 
     test_main();
+
+    testutils::exit_qemu(QemuExitCode::Success);
     loop {}
 }
 
@@ -62,5 +62,5 @@ fn many_boxes() {
 
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
-    popcorn::test_panic_handler(info)
+    testutils::test_panic_handler(info)
 }

@@ -1,6 +1,4 @@
-use crate::{memory, println};
 use bootloader::bootinfo::MemoryMap;
-use bootloader::BootInfo;
 /**
  * @file memory.rs
  * @brief Memory functions
@@ -149,8 +147,6 @@ pub unsafe extern "C" fn memcmp(s1: *const u8, s2: *const u8, n: usize) -> i32 {
  * @return A mutable reference to the active level 4 page table
  */
 pub unsafe fn active_lv4_table(phys_mem_offset: VirtAddr) -> &'static mut PageTable {
-    use x86_64::registers::control::Cr3;
-
     let (lv4_table_frame, _) = Cr3::read();
 
     let phys = lv4_table_frame.start_address();

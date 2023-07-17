@@ -9,16 +9,17 @@
 #![feature(fmt_internals)]
 
 extern crate alloc;
-use alloc::boxed::Box;
-use alloc::rc::Rc;
-use alloc::vec;
-use alloc::vec::Vec;
+
+#[cfg(not(test))]
 use bootloader::{entry_point, BootInfo};
 use core::panic::PanicInfo;
-use popcorn::memory::{init_pagetable, BootInfoFrameAllocator};
-use popcorn::vga_buffer::Color;
-use popcorn::{allocation, clear_screen, init, print, println, serial_println, set_color};
-use x86_64::VirtAddr;
+use popcorn::{kernel};
+use popcorn::system::{allocation, init_system, task};
+#[cfg(not(test))]
+use popcorn::system::memory::{BootInfoFrameAllocator, init_pagetable};
+
+
+#[cfg(not(test))]
 entry_point!(kernel_main);
 
 /**
@@ -26,53 +27,67 @@ entry_point!(kernel_main);
  * @details This function is called by the bootloader.
  * @param boot_info The boot information passed by the bootloader.
  */
+#[cfg(not(test))]
 fn kernel_main(boot_info: &'static BootInfo) -> ! {
+    use popcorn::system::vga_buffer::Color;
+    use popcorn::{ clear_screen, println, set_color};
+    use x86_64::VirtAddr;
+
     // This can be named arbitrarily.
 
     // Print some information
     clear_screen!(Color::Black);
     set_color!(Color::White, Color::Black);
-    println!("Welcome to the Popcorn kernel!");
-    serial_println!("Welcome to the Popcorn kernel!");
+    println!("Initializing hardware...");
 
     // Initialize the kernel
-    init();
+    init_system();
 
     let phys_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
     let mut mapper = unsafe { init_pagetable(phys_mem_offset) };
     let mut frame_allocator = unsafe { BootInfoFrameAllocator::init(&boot_info.memory_map) };
 
-    // new
     allocation::init_heap(&mut mapper, &mut frame_allocator).expect("heap initialization failed");
+    // The heap is now ready to be used. We can now use Box, Vec, etc.
 
-    let heap_value = Box::new(41);
-    println!("heap_value at {:p}", heap_value);
-
-    // create a dynamically sized vector
-    let mut vec = Vec::new();
-    for i in 0..500 {
-        vec.push(i);
-    }
-    println!("vec at {:p}", vec.as_slice());
-
-    // create a reference counted vector -> will be freed when count reaches 0
-    let reference_counted = Rc::new(vec![1, 2, 3]);
-    let cloned_reference = reference_counted.clone();
-    println!(
-        "current reference count is {}",
-        Rc::strong_count(&cloned_reference)
-    );
-    core::mem::drop(reference_counted);
-    println!(
-        "reference count is {} now",
-        Rc::strong_count(&cloned_reference)
-    );
-
-    // […] call `test_main` in test context
-    println!("It did not crash!");
+    kernel::init_kernel();
 
     // Halt until the next interrupt
-    popcorn::hlt_loop();
+    task::hlt_loop();
+}
+
+// The below needs to be separate from lib.rs, so it doesn't end up in tests.
+/**
+ * @brief Processes a Panic event
+ * @details This function is called when a panic occurs. It prints the panic message, and halts the system.
+ * @param info Information about the panic
+ */
+#[cfg(not(test))]
+#[panic_handler]
+fn panic(info: &PanicInfo) -> ! {
+    use popcorn::system::panic::{knl_panic, PanicTechnicalInfo};
+    use x86_64::instructions::segmentation::Segment;
+    // Create stack frame
+    let mut stack_frame: PanicTechnicalInfo = PanicTechnicalInfo::new();
+
+    // Fill stack tech info
+    stack_frame.instruction_pointer = x86_64::registers::control::Cr2::read().as_u64();
+    stack_frame.code_segment = x86_64::instructions::segmentation::CS::get_reg().0 as u64;
+    stack_frame.cpu_flags = x86_64::registers::rflags::read_raw();
+    stack_frame.stack_pointer = x86_64::registers::control::Cr2::read().as_u64();
+    stack_frame.stack_segment = x86_64::instructions::segmentation::SS::get_reg().0 as u64;
+
+    knl_panic(
+        info.location().unwrap(),
+        info.message().unwrap(),
+        &stack_frame,
+    );
+}
+
+#[cfg(test)]
+#[panic_handler]
+fn panic(info: &PanicInfo) -> ! {
+    popcorn::test_panic_handler(info)
 }
 
 #[test_case]

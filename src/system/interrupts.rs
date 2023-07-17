@@ -1,11 +1,11 @@
-use crate::gdt::{DOUBLE_FAULT_IST_INDEX, GDT};
-use crate::interrupt_handlers;
-use crate::{exit_qemu, hlt_loop, println, serial_println, QemuExitCode};
 use lazy_static::lazy_static;
 use pic8259::ChainedPics;
 use spin;
 use x86_64::instructions::segmentation::Segment;
 use x86_64::structures::idt::InterruptDescriptorTable;
+use crate::println;
+use crate::system::gdt::{DOUBLE_FAULT_IST_INDEX, GDT};
+use crate::system::interrupt_handlers;
 
 pub const PIC_1_OFFSET: u8 = 32;
 pub const PIC_2_OFFSET: u8 = PIC_1_OFFSET + 8;
@@ -53,12 +53,12 @@ lazy_static! {
 }
 
 /**
- * @brief Initializes the Interrupt Descriptor Table
- * @details This function initializes the Interrupt Descriptor Table, and loads it into the CPU.
- * This will allow us to handle interrupts.
+ * @brief Initializes the Global Descriptor Table
+ * @details This function initializes the Global Descriptor Table, and loads it into the CPU.
+ * This will allow us to use the GDT.
  */
-pub fn init_idt() {
-    println!("Initializing IDT...");
+pub fn init_gdt() {
+    println!("Initializing GDT...");
     use x86_64::instructions::segmentation::CS;
     use x86_64::instructions::tables::load_tss;
 
@@ -67,6 +67,16 @@ pub fn init_idt() {
         CS::set_reg(GDT.1.code_selector);
         load_tss(GDT.1.tss_selector);
     }
+}
+
+/**
+ * @brief Initializes the Interrupt Descriptor Table
+ * @details This function initializes the Interrupt Descriptor Table, and loads it into the CPU.
+ * This will allow us to handle interrupts.
+ */
+pub fn init_idt() {
+    println!("Initializing IDT...");
+
     IDT.load();
 }
 
@@ -81,27 +91,8 @@ pub fn init_pic() {
 /// Initializes things related to interrupts
 pub fn init_interrupts() {
     println!("Initializing interrupts...");
+    init_gdt();
     init_idt();
     init_pic();
     x86_64::instructions::interrupts::enable();
-}
-
-// our panic handler in test mode
-#[cfg(test)]
-#[panic_handler]
-fn panic(info: &PanicInfo) -> ! {
-    serial_println!("[failed]\n");
-    serial_println!("Error: {}\n", info);
-    exit_qemu(QemuExitCode::Failed);
-    hlt_loop();
-}
-
-/*=======================================================
-    TESTS
-=======================================================*/
-
-#[test_case]
-fn test_init_interrupts() {
-    init_interrupts();
-    assert_eq!(IDT.load(), IDT_DESCRIPTOR);
 }

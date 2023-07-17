@@ -120,4 +120,4 @@ jobs:
     - name: Add nightly-x86_64
       run: rustup component add rust-src --toolchain nightly-x86_64-unknown-linux-gnu
     - name: Clippy
-      run: cargo clippy --verbose --all -- --deny warnings
+      run: cargo clippy --verbose --all

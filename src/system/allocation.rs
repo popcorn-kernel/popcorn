@@ -54,11 +54,11 @@ pub unsafe trait GlobalAlloc {
     unsafe fn alloc(&self, layout: Layout) -> *mut u8;
     unsafe fn dealloc(&self, ptr: *mut u8, layout: Layout);
 
-    unsafe fn alloc_zeroed(&self, layout: Layout) -> *mut u8 {
-        return null_mut();
+    unsafe fn alloc_zeroed(&self, _layout: Layout) -> *mut u8 {
+        null_mut()
     }
-    unsafe fn realloc(&self, ptr: *mut u8, layout: Layout, new_size: usize) -> *mut u8 {
-        return null_mut();
+    unsafe fn realloc(&self, _ptr: *mut u8, _layout: Layout, _new_size: usize) -> *mut u8 {
+        null_mut()
     }
 }
 

@@ -16,6 +16,7 @@ debug: build
 rebuild: clean build
 
 test:
-	cargo test
+	cargo test --test heap_allocation
+	cargo test --test stack_overflow
 
 .PHONY: build

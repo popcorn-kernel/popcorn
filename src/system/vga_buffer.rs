@@ -154,7 +154,7 @@ lazy_static! {
 /// Accepts variable number of arguments for formatting.
 #[macro_export]
 macro_rules! print {
-    ($($arg:tt)*) => ($crate::vga_buffer::_print(format_args!($($arg)*)));
+    ($($arg:tt)*) => ($crate::system::vga_buffer::_print(format_args!($($arg)*)));
 }
 
 /// Prints to the VGA text buffer through the global `WRITER` instance,
@@ -175,7 +175,7 @@ macro_rules! println {
 #[macro_export]
 macro_rules! clear_screen {
     ($arg:expr) => {
-        $crate::vga_buffer::_clear_screen($arg);
+        $crate::system::vga_buffer::_clear_screen($arg);
     };
 }
 
@@ -186,7 +186,7 @@ macro_rules! clear_screen {
 #[macro_export]
 macro_rules! set_color {
     ($foreground:expr, $background:expr) => {
-        $crate::vga_buffer::_set_color($foreground, $background)
+        $crate::system::vga_buffer::_set_color($foreground, $background)
     };
 }
 
