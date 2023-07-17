@@ -1,5 +1,3 @@
-#![reexport_test_harness_main = "test_main"]
-
 use core::panic::PanicInfo;
 
 pub trait Testable {
@@ -61,15 +59,6 @@ use crate::system::task::hlt_loop;
 
 #[cfg(test)]
 entry_point!(test_kernel_main);
-
-/// Entry point for `cargo xtest`
-#[cfg(test)]
-fn test_kernel_main(_boot_info: &'static BootInfo) -> ! {
-    use crate::kernel;
-    kernel::init_kernel();
-    test_main();
-    hlt_loop();
-}
 
 #[cfg(test)]
 #[panic_handler]

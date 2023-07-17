@@ -5,9 +5,12 @@
 #![test_runner(crate::testutils::test_runner)]
 #![feature(panic_info_message)]
 #![feature(fmt_internals)]
+#![reexport_test_harness_main = "test_main"]
 
 extern crate alloc;
 
+use bootloader::BootInfo;
+use crate::system::task::hlt_loop;
 use crate::system::vga_buffer::Color;
 pub mod system;
 pub mod testutils;
@@ -39,3 +42,11 @@ pub fn shutdown() {
     system::task::hlt_loop();
 }
 
+/// Entry point for `cargo xtest`
+#[cfg(test)]
+fn test_kernel_main(_boot_info: &'static BootInfo) -> ! {
+    use crate::kernel;
+    kernel::init_kernel();
+    test_main();
+    hlt_loop();
+}
