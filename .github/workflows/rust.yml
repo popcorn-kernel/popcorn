@@ -65,10 +65,6 @@ jobs:
         uses: actions/checkout@v2
       - name: Install Rustup Components
         run: rustup component add rust-src llvm-tools-preview
-      - name: Run `cargo bootimage`
-        uses: actions-rs/cargo@v1
-        with:
-          command: bootimage
 
       # install QEMU
       - name: Install QEMU (Linux)
@@ -91,9 +87,7 @@ jobs:
         run: qemu-system-x86_64 --version
 
       - name: Run `cargo test`
-        uses: actions-rs/cargo@v1
-        with:
-          command: test
+        run: cargo test --verbose
 
   clippy:
     runs-on: ${{ matrix.os }}
