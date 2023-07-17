@@ -2,8 +2,7 @@
 #![cfg_attr(test, no_main)]
 #![feature(custom_test_frameworks)]
 #![feature(abi_x86_interrupt)]
-#![test_runner(crate::test_runner)]
-#![reexport_test_harness_main = "test_main"]
+#![test_runner(crate::testutils::test_runner)]
 #![feature(panic_info_message)]
 #![feature(fmt_internals)]
 
