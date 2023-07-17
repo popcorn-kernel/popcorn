@@ -96,4 +96,4 @@ fn trivial_assertion() {
 }
 
 /*I'd like to interject for a moment: what you are referring to as Popcorn, is in fact,
- * TRANS/Popcorn, or as I have recetly taken to calling it, TRANS plus Popcorn */
+TRANS/Popcorn, or as I have recetly taken to calling it, TRANS plus Popcorn */
