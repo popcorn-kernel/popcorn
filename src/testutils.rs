@@ -58,9 +58,6 @@ use crate::{ serial_print, serial_println};
 use crate::system::task::hlt_loop;
 
 #[cfg(test)]
-entry_point!(test_kernel_main);
-
-#[cfg(test)]
 #[panic_handler]
 fn test_panic(info: &PanicInfo) -> ! {
     test_panic_handler(info)

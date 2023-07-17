@@ -9,7 +9,7 @@
 
 extern crate alloc;
 
-use bootloader::BootInfo;
+use bootloader::{BootInfo, entry_point};
 use crate::system::task::hlt_loop;
 use crate::system::vga_buffer::Color;
 pub mod system;
@@ -41,6 +41,9 @@ pub fn shutdown() {
     // Stop processor
     system::task::hlt_loop();
 }
+
+#[cfg(test)]
+entry_point!(test_kernel_main);
 
 /// Entry point for `cargo xtest`
 #[cfg(test)]
