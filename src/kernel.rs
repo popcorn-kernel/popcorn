@@ -1,6 +1,6 @@
 // Import the kernel directory, and offer some functions to manage it from the outside
 
-use crate::{println, set_color};
+use crate::{print, println, set_color};
 use crate::system::task::hlt_loop;
 use crate::system::validate_system;
 use crate::system::vga_buffer::Color;
@@ -24,5 +24,10 @@ pub fn init_kernel()
     set_color!(Color::Green, Color::Black);
     println!("System validation passed. Starting kernel...");
     set_color!(Color::White, Color::Black);
+    print!("Welcome to ");
+    set_color!(Color::LightCyan, Color::Black);
+    print!("TRANS/Popcorn");
+    set_color!(Color::White, Color::Black);
+    println!("!");
     kernel_main::main();
 }
