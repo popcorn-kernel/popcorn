@@ -100,18 +100,18 @@ fn knl_panic_print(
     let title_padding: usize = (80 / 2) - (title.len() / 2);
 
     // Render
-    clear_screen!(Color::Green);
+    clear_screen!(Color::Red);
 
-    set_color!(Color::White, Color::Green);
+    set_color!(Color::Red, Color::Red);
     // for every space in the title padding, print a space
     for _ in 0..title_padding {
         print!(" ");
     }
 
-    set_color!(Color::Yellow, Color::Green);
+    set_color!(Color::Yellow, Color::Red);
     println!("{}", title);
 
-    set_color!(Color::White, Color::Green);
+    set_color!(Color::White, Color::Red);
 
     println!(
         include_str!("../../locale/en_panic.txt"),
@@ -135,6 +135,13 @@ fn knl_panic_print(
  * @param stack_frame Information about the stack frame, such as the instruction pointer, stack pointer, etc.
  */
 pub fn knl_panic(location: &Location, message: &Arguments, stack_frame: &PanicTechnicalInfo) -> ! {
+    use vga::colors::{Color16, TextModeColor};
+    use vga::writers::{ScreenCharacter, TextWriter, Text80x25};
+
+    // Manually switch to VGA text mode
+   // let mode = Text80x25::new();
+    //mode.set_mode();
+
     println!("KERNEL PANIC!");
 
     // Print stuff to Serial

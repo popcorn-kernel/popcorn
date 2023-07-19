@@ -18,6 +18,7 @@ pub static PICS: spin::Mutex<ChainedPics> =
 pub enum InterruptIndex {
     Timer = PIC_1_OFFSET,
     Keyboard,
+    Syscall = 0x80,
 }
 
 impl InterruptIndex {
@@ -46,6 +47,8 @@ lazy_static! {
             .set_handler_fn(interrupt_handlers::timer_interrupt_handler); // new
             idt.page_fault.set_handler_fn(interrupt_handlers::page_fault_handler);
             idt[InterruptIndex::Keyboard.as_usize()].set_handler_fn(interrupt_handlers::keyboard_interrupt_handler);
+
+            idt[InterruptIndex::Syscall.as_usize()].set_handler_fn(interrupt_handlers::syscall_handler);
         }
 
         idt

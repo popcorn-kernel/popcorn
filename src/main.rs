@@ -7,6 +7,7 @@
 #![feature(asm_const)]
 #![feature(abi_x86_interrupt)]
 #![feature(fmt_internals)]
+#![feature(core_intrinsics)]
 
 extern crate alloc;
 

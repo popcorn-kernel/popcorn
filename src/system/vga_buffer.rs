@@ -3,6 +3,11 @@ use lazy_static::lazy_static;
 use spin::Mutex;
 use volatile::Volatile;
 use x86_64::instructions::interrupts;
+use vga::writers::PrimitiveDrawing;
+use vga::colors::Color16;
+use vga::writers::{Graphics640x480x16, GraphicsWriter};
+use crate::{serial_print, serial_println};
+
 
 #[allow(dead_code)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -24,6 +29,31 @@ pub enum Color {
     Pink = 0xD,
     Yellow = 0xE,
     White = 0xF,
+}
+
+// Convert u8 to Color
+pub fn ConvertToColor(val: u8) -> Color
+{
+    // Convert the u8 to a Color
+    match val {
+        0x0 => Color::Black,
+        0x1 => Color::Blue,
+        0x2 => Color::Green,
+        0x3 => Color::Cyan,
+        0x4 => Color::Red,
+        0x5 => Color::Magenta,
+        0x6 => Color::Brown,
+        0x7 => Color::LightGray,
+        0x8 => Color::DarkGray,
+        0x9 => Color::LightBlue,
+        0xA => Color::LightGreen,
+        0xB => Color::LightCyan,
+        0xC => Color::LightRed,
+        0xD => Color::Pink,
+        0xE => Color::Yellow,
+        0xF => Color::White,
+        _ => Color::Black,
+    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -202,6 +232,7 @@ pub fn _print(args: fmt::Arguments) {
     interrupts::without_interrupts(|| {
         use core::fmt::Write;
         WRITER.lock().write_fmt(args).unwrap();
+        serial_print!("{}", args);
     });
 }
 

@@ -1,5 +1,7 @@
+use core::arch::asm;
 use core::panic::Location;
 use x86_64::structures::idt::{InterruptStackFrame, PageFaultErrorCode};
+use crate::println;
 use crate::system::interrupts::{InterruptIndex, PICS};
 use crate::system::panic::{knl_panic_str, PanicTechnicalInfo};
 
@@ -15,6 +17,35 @@ pub extern "x86-interrupt" fn keyboard_interrupt_handler(_stack_frame: Interrupt
         PICS.lock()
             .notify_end_of_interrupt(InterruptIndex::Keyboard.as_u8());
     }
+}
+
+pub extern "x86-interrupt" fn syscall_handler(_stack_frame: InterruptStackFrame)
+{
+    // Grab registers and print to screen
+let rax: u64;
+let rbx: u64;
+let rcx: u64;
+let rdx: u64;
+let rsi: u64;
+let rdi: u64;
+    // Get registers
+    unsafe
+        {
+            asm!("mov {o}, rax", o = out(reg) rax);
+asm!("mov {o}, rbx", o = out(reg) rbx);
+asm!("mov {o}, rcx", o = out(reg) rcx);
+asm!("mov {o}, rdx", o = out(reg) rdx);
+asm!("mov {o}, rsi", o = out(reg) rsi);
+asm!("mov {o}, rdi", o = out(reg) rdi);
+        }
+    println!("RAX: {}", rax);
+    println!("RBX: {}", rbx);
+    println!("RCX: {}", rcx);
+    println!("RDX: {}", rdx);
+    println!("RSI: {}", rsi);
+    println!("RDI: {}", rdi);
+    println!("Syscall");
+
 }
 
 /// Handles any double faults. Double faults are caused by faults that occur while handling another fault.
