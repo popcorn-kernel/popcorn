@@ -38,8 +38,9 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
 
     // Print some information
     clear_screen!(Color::Black);
-    set_color!(Color::White, Color::Black);
+    set_color!(Color::Green, Color::Black);
     println!("Initializing hardware...");
+    set_color!(Color::White, Color::Black);
 
     // Initialize the kernel
     init_system();
@@ -48,9 +49,13 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
     let mut mapper = unsafe { init_pagetable(phys_mem_offset) };
     let mut frame_allocator = unsafe { BootInfoFrameAllocator::init(&boot_info.memory_map) };
 
+    set_color!(Color::Green, Color::Black);
+    println!("Initializing heap...");
+    set_color!(Color::White, Color::Black);
     allocation::init_heap(&mut mapper, &mut frame_allocator).expect("heap initialization failed");
     // The heap is now ready to be used. We can now use Box, Vec, etc.
 
+    // Initialize the kernel
     kernel::init_kernel();
 
     // Halt until the next interrupt

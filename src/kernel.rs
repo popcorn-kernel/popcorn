@@ -16,7 +16,9 @@ pub fn init_kernel()
 {
     // Make sure the system is properly set up first. Could risk a bad time otherwise.
     if validate_system() == false {
+        set_color!(Color::Red, Color::Black);
         println!("System validation failed. Halting.");
+        set_color!(Color::White, Color::Black);
         hlt_loop();
     }
     set_color!(Color::Green, Color::Black);
