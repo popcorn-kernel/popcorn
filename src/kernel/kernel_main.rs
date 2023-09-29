@@ -10,7 +10,5 @@ pub fn main() {
     //println!("syscall test, expect to see 'Syscall':");
     //unsafe{asm!("syscall")};
 
-    loop {}
-
     system::task::hlt_loop();
 }

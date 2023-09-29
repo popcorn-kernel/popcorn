@@ -10,8 +10,8 @@ use vga::{
 };
 
 const WIDTH: usize = 640;
-const HEIGHT: usize = 480;
-const SIZE: usize = (WIDTH * HEIGHT) / 8;
+// const HEIGHT: usize = 480;
+// const SIZE: usize = (WIDTH * HEIGHT) / 8;
 const WIDTH_IN_BYTES: usize = WIDTH / 8;
 
 /// Prints to the VGA text buffer through the global `WRITER` instance.
