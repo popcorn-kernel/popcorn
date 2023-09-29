@@ -1,9 +1,9 @@
+use crate::system::task::hlt_loop;
 use crate::system::vga_buffer::Color;
 use crate::{clear_screen, print, println, serial_println, set_color};
 use core::fmt::Arguments;
 use core::panic::Location;
 use x86_64::structures::idt::PageFaultErrorCode;
-use crate::system::task::hlt_loop;
 
 // If there's something weird, and it don't look good, who you gonna call?
 
@@ -26,12 +26,12 @@ pub struct PanicTechnicalInfo {
 }
 
 /// @brief Implementation of the PanicTechnicalInfo struct
-impl PanicTechnicalInfo {
+impl Default for PanicTechnicalInfo {
     /**
      * @brief Creates a new PanicTechnicalInfo
      * @return A new PanicTechnicalInfo
      */
-    pub fn new() -> Self {
+    fn default() -> Self {
         Self {
             instruction_pointer: 0,
             code_segment: 0,
@@ -52,12 +52,7 @@ pub fn knl_panic_str(
 ) {
     let x = &[message];
     // Create arguments for the panic
-    let args = Arguments::new_v1(
-        x,
-        &match () {
-            () => [],
-        },
-    );
+    let args = Arguments::new_v1(x, &[]);
     knl_panic(_location, &args, stack_frame)
 }
 
@@ -135,11 +130,8 @@ fn knl_panic_print(
  * @param stack_frame Information about the stack frame, such as the instruction pointer, stack pointer, etc.
  */
 pub fn knl_panic(location: &Location, message: &Arguments, stack_frame: &PanicTechnicalInfo) -> ! {
-    use vga::colors::{Color16, TextModeColor};
-    use vga::writers::{ScreenCharacter, TextWriter, Text80x25};
-
     // Manually switch to VGA text mode
-   // let mode = Text80x25::new();
+    // let mode = Text80x25::new();
     //mode.set_mode();
 
     println!("KERNEL PANIC!");

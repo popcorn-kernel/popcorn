@@ -14,11 +14,10 @@ extern crate alloc;
 #[cfg(not(test))]
 use bootloader::{entry_point, BootInfo};
 use core::panic::PanicInfo;
-use popcorn::{kernel};
-use popcorn::system::{allocation, init_system, task};
+use popcorn::kernel;
 #[cfg(not(test))]
-use popcorn::system::memory::{BootInfoFrameAllocator, init_pagetable};
-
+use popcorn::system::memory::{init_pagetable, BootInfoFrameAllocator};
+use popcorn::system::{allocation, init_system, task};
 
 #[cfg(not(test))]
 entry_point!(kernel_main);
@@ -31,7 +30,7 @@ entry_point!(kernel_main);
 #[cfg(not(test))]
 fn kernel_main(boot_info: &'static BootInfo) -> ! {
     use popcorn::system::vga_buffer::Color;
-    use popcorn::{ clear_screen, println, set_color};
+    use popcorn::{clear_screen, println, set_color};
     use x86_64::VirtAddr;
 
     // This can be named arbitrarily.
@@ -74,7 +73,7 @@ fn panic(info: &PanicInfo) -> ! {
     use popcorn::system::panic::{knl_panic, PanicTechnicalInfo};
     use x86_64::instructions::segmentation::Segment;
     // Create stack frame
-    let mut stack_frame: PanicTechnicalInfo = PanicTechnicalInfo::new();
+    let mut stack_frame: PanicTechnicalInfo = PanicTechnicalInfo::default();
 
     // Fill stack tech info
     stack_frame.instruction_pointer = x86_64::registers::control::Cr2::read().as_u64();

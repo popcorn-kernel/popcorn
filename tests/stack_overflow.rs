@@ -7,8 +7,8 @@
 
 use core::panic::PanicInfo;
 use lazy_static::lazy_static;
+use popcorn::{serial_print, serial_println, testutils};
 use x86_64::structures::idt::{InterruptDescriptorTable, InterruptStackFrame};
-use popcorn::{serial_println, serial_print, testutils};
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {

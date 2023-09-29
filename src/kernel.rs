@@ -1,9 +1,9 @@
 // Import the kernel directory, and offer some functions to manage it from the outside
 
-use crate::{print, println, set_color};
 use crate::system::task::hlt_loop;
 use crate::system::validate_system;
 use crate::system::vga_buffer::Color;
+use crate::{print, println, set_color};
 
 pub mod kernel_main;
 
@@ -12,10 +12,9 @@ pub mod kernel_main;
  * @details Call this to start the kernel, once low-level initialization is done.
  * Don't call this function before low-level initialization is done, or you will get problems.
  */
-pub fn init_kernel()
-{
+pub fn init_kernel() {
     // Make sure the system is properly set up first. Could risk a bad time otherwise.
-    if validate_system() == false {
+    if !validate_system() {
         set_color!(Color::Red, Color::Black);
         println!("System validation failed. Halting.");
         set_color!(Color::White, Color::Black);

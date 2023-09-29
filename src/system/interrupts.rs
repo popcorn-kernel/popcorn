@@ -1,11 +1,11 @@
+use crate::println;
+use crate::system::gdt::{DOUBLE_FAULT_IST_INDEX, GDT};
+use crate::system::interrupt_handlers;
 use lazy_static::lazy_static;
 use pic8259::ChainedPics;
 use spin;
 use x86_64::instructions::segmentation::Segment;
 use x86_64::structures::idt::InterruptDescriptorTable;
-use crate::println;
-use crate::system::gdt::{DOUBLE_FAULT_IST_INDEX, GDT};
-use crate::system::interrupt_handlers;
 
 pub const PIC_1_OFFSET: u8 = 32;
 pub const PIC_2_OFFSET: u8 = PIC_1_OFFSET + 8;
