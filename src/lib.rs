@@ -6,6 +6,7 @@
 #![feature(panic_info_message)]
 #![feature(fmt_internals)]
 #![reexport_test_harness_main = "test_main"]
+#![allow(clippy::missing_safety_doc)]
 
 extern crate alloc;
 
