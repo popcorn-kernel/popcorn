@@ -32,7 +32,7 @@ pub enum Color {
 }
 
 // Convert u8 to Color
-pub fn ConvertToColor(val: u8) -> Color
+pub fn convert_to_color(val: u8) -> Color
 {
     // Convert the u8 to a Color
     match val {
