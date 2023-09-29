@@ -9,11 +9,11 @@ use alloc::boxed::Box;
 use alloc::vec::Vec;
 use bootloader::{entry_point, BootInfo};
 use core::panic::PanicInfo;
-use popcorn::{serial_println, testutils};
 use popcorn::system::allocation;
 use popcorn::system::allocation::HEAP_SIZE;
-use popcorn::system::memory::{BootInfoFrameAllocator, init_pagetable};
+use popcorn::system::memory::{init_pagetable, BootInfoFrameAllocator};
 use popcorn::testutils::QemuExitCode;
+use popcorn::{serial_println, testutils};
 
 entry_point!(main);
 

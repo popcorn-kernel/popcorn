@@ -5,8 +5,8 @@ pub trait Testable {
 }
 
 impl<T> Testable for T
-    where
-        T: Fn(),
+where
+    T: Fn(),
 {
     fn run(&self) {
         serial_print!("{}...\t", core::any::type_name::<T>());
@@ -51,11 +51,10 @@ pub fn exit_qemu(exit_code: QemuExitCode) {
     }
 }
 
-
+use crate::system::task::hlt_loop;
+use crate::{serial_print, serial_println};
 #[cfg(test)]
 use bootloader::{entry_point, BootInfo};
-use crate::{ serial_print, serial_println};
-use crate::system::task::hlt_loop;
 
 #[cfg(test)]
 #[panic_handler]

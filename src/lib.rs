@@ -9,13 +9,10 @@
 
 extern crate alloc;
 
-use bootloader::{BootInfo, entry_point};
-use crate::system::task::hlt_loop;
 use crate::system::vga_buffer::Color;
+pub mod kernel;
 pub mod system;
 pub mod testutils;
-pub mod kernel;
-
 
 /**
  * @brief Initializes the kernel.
