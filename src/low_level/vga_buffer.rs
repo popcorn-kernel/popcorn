@@ -71,6 +71,20 @@ impl Writer {
         self.clear_row(BUFFER_HEIGHT - 1);
         self.column_position = 0;
     }
+
+    pub fn clear_screen(&mut self, color: Color) {
+        let blank = Char {
+            ascii_character: b' ',
+            color_code: ColorCode::new(color, color),
+        };
+
+        for row in 0..BUFFER_HEIGHT {
+            for col in 0..BUFFER_WIDTH {
+                self.buffer.chars[row][col] = blank;
+            }
+        }
+    }
+
     fn clear_row(&mut self, row: usize) {
         let blank = Char {
             ascii_character: b' ',
@@ -143,6 +157,16 @@ macro_rules! set_color {
     };
 }
 
+/// Clears the screen with the given color.
+/// Accepts a `Color` enum value.
+/// See the `Color` enum for available colors.
+#[macro_export]
+macro_rules! clear_screen {
+    ($clear_color:expr) => {
+        $crate::low_level::vga_buffer::_clear_screen($clear_color);
+    };
+}
+
 /**
  *  \brief Sets the foreground and background color for the VGA text buffer.
  *  This function is called by the `set_color!` macro.
@@ -153,5 +177,12 @@ macro_rules! set_color {
 pub fn _set_color(foreground: Color, background: Color) {
     interrupts::without_interrupts(|| {
         WRITER.lock().set_color(foreground, background);
+    });
+}
+
+#[doc(hidden)]
+pub fn _clear_screen(color: Color) {
+    interrupts::without_interrupts(|| {
+        WRITER.lock().clear_screen(color);
     });
 }
