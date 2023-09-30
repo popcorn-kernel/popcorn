@@ -7,11 +7,11 @@ use core::panic::PanicInfo;
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     println!("{}", info);
-    loop {}
+    hlt_loop();
 }
 
 use bootloader::{entry_point, BootInfo};
-use popcorn::{init, println};
+use popcorn::{init, print, println, hlt_loop};
 entry_point!(kernel_main);
 
 fn kernel_main(_boot_info: &'static BootInfo) -> ! {
@@ -19,13 +19,5 @@ fn kernel_main(_boot_info: &'static BootInfo) -> ! {
 
     init();
 
-    stack_overflow();
-
-    println!("hello!");
-    loop {}
+    hlt_loop();
 }
-
-fn stack_overflow() {
-    stack_overflow(); // for each recursion, the return address is pushed
-}
-
