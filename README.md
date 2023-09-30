@@ -54,13 +54,13 @@ Submit a pull request, describing your changes and their purpose clearly.
 
 ### Building and Running
 Before building the kernel, you must first install the required dependencies. To install the dependencies, run the following command:
-```make install```
+```./configure.sh```
 
 To build the kernel, run the following command:
-```make build```
+```cargo bootimage```
 
 To run the kernel in QEMU, run the following command:
-```make run```
+```qemu-system-x86_64 -drive format=raw,file=target/x86_64-arch/debug/bootimage-popcorn.bin```
 
 ---
 
