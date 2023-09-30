@@ -8,6 +8,7 @@ edition = "2021"
 [dependencies]
 bootloader = { version = "0.9.8", features = ["map_physical_memory"]}
 spin = "0.9.8"
+x86_64 = "0.14.11"
 
 [dependencies.lazy_static]
 version = "1.4"
