@@ -1,0 +1,18 @@
+[package]
+name = "popcorn"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+bootloader = { version = "0.9.8", features = ["map_physical_memory"]}
+spin = "0.9.8"
+
+[dependencies.lazy_static]
+version = "1.4"
+features = ["spin_no_std"]
+
+
+[package.metadata.bootimage]
+run-command = ["qemu-system-x86_64", "-s", "-S", "-drive", "format=raw,file={}"]
