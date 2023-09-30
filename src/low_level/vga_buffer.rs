@@ -1,3 +1,8 @@
+use core::fmt;
+use lazy_static::lazy_static;
+use spin::Mutex;
+use x86_64::instructions::interrupts;
+
 #[allow(dead_code)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(u8)]
@@ -112,11 +117,6 @@ impl fmt::Write for Writer {
     }
 }
 
-use core::fmt;
-use lazy_static::lazy_static;
-use spin::Mutex;
-use x86_64::instructions::interrupts;
-
 lazy_static! {
     pub static ref WRITER: Mutex<Writer> = Mutex::new(Writer {
         column_position: 0,
@@ -139,7 +139,6 @@ macro_rules! println {
 #[doc(hidden)]
 pub fn _print(args: fmt::Arguments) {
     use core::fmt::Write;
-    use x86_64::instructions::interrupts;
 
     interrupts::without_interrupts(|| {
         WRITER.lock().write_fmt(args).unwrap();
