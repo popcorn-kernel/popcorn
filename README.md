@@ -50,7 +50,6 @@ Submit a pull request, describing your changes and their purpose clearly.
 ### Prerequisites
 - Rust/Cargo
 - QEMU
-- Make
 
 ### Building and Running
 Before building the kernel, you must first install the required dependencies. To install the dependencies, run the following command:
