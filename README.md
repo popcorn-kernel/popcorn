@@ -70,10 +70,10 @@ To run the kernel in QEMU, run the following command:
 
 
 
-  | <img src="https://github.com/SparkySimp.png" width="100" height="100"> | <img src="https://github.com/electron271.png" width="100" height="100"> | <img src="https://github.com/SatoTsukasaCode.png" width="100" height="100"> | <img src="https://github.com/Techiesplash.png" width="100" height="100"> | <img src="https://github.com/Lily8000.png" width="100" height="100"> |
-  |:---:|:---:|:---:|:---:|:---:|
-  | [SparkySimp](https://github.com/SparkySimp) | [electron271](https://github.com/electron271) | [SatoTsukasaCode](https://github.com/SatoTsukasaCode) | [Techiesplash](https://github.com/Techiesplash) | [Lily8000](https://github.com/Lily8000) |
-  | Lead Developer | Lead Developer | Developer | Developer | Documentation |
+  | <img src="https://github.com/SparkySimp.png" width="100" height="100"> | <img src="https://github.com/electron271.png" width="100" height="100"> | <img src="https://github.com/SatoTsukasaCode.png" width="100" height="100"> | <img src="https://github.com/Techiesplash.png" width="100" height="100"> |  <img src="https://github.com/HackedOS.png" width="100" height="100"> | <img src="https://github.com/Lily8000.png" width="100" height="100"> |
+  |:---:|:---:|:---:|:---:|:---:|:---:|
+  | [SparkySimp](https://github.com/SparkySimp) | [electron271](https://github.com/electron271) | [SatoTsukasaCode](https://github.com/SatoTsukasaCode) | [Techiesplash](https://github.com/Techiesplash) | [HackedOS](https://github.com/HackedOS) | [Lily8000](https://github.com/Lily8000) |
+  | Lead Developer | Lead Developer | Developer | Developer | Developer | Documentation |
 </div>
 </div>
 
