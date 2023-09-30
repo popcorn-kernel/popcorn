@@ -59,7 +59,7 @@ To build the kernel, run the following command:
 ```cargo bootimage```
 
 To run the kernel in QEMU, run the following command:
-```qemu-system-x86_64 -drive format=raw,file=target/x86_64-arch/debug/bootimage-popcorn.bin```
+```cargo run```
 
 ---
 
