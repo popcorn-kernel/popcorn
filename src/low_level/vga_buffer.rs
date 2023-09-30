@@ -85,6 +85,10 @@ impl Writer {
             self.write_byte(byte)
         }
     }
+
+    fn set_color(&mut self, foreground: Color, background: Color) {
+        self.color_code = ColorCode::new(foreground, background);
+    }
 }
 
 impl fmt::Write for Writer {
@@ -97,6 +101,7 @@ impl fmt::Write for Writer {
 use core::fmt;
 use lazy_static::lazy_static;
 use spin::Mutex;
+use x86_64::instructions::interrupts;
 
 lazy_static! {
     pub static ref WRITER: Mutex<Writer> = Mutex::new(Writer {
@@ -124,5 +129,29 @@ pub fn _print(args: fmt::Arguments) {
 
     interrupts::without_interrupts(|| {
         WRITER.lock().write_fmt(args).unwrap();
+    });
+}
+
+/// Sets the foreground and background color for the VGA text buffer.
+/// Accepts two `Color` enum values.
+/// See the `Color` enum for available colors.
+/// The first argument is the foreground color, the second is the background color.
+#[macro_export]
+macro_rules! set_color {
+    ($foreground:expr, $background:expr) => {
+        $crate::low_level::vga_buffer::_set_color($foreground, $background)
+    };
+}
+
+/**
+ *  \brief Sets the foreground and background color for the VGA text buffer.
+ *  This function is called by the `set_color!` macro.
+ *  \param foreground The foreground color.
+ *  \param background The background color.
+ */
+#[doc(hidden)]
+pub fn _set_color(foreground: Color, background: Color) {
+    interrupts::without_interrupts(|| {
+        WRITER.lock().set_color(foreground, background);
     });
 }
