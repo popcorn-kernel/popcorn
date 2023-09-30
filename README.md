@@ -14,6 +14,7 @@ Welcome to the Popcorn Kernel project! Our mission is to build a powerful and in
 ![GitHub repo size](https://img.shields.io/github/repo-size/popcorn-kernel/popcorn)
 ![GitHub issues](https://img.shields.io/github/issues/popcorn-kernel/popcorn)
 ![License](https://img.shields.io/github/license/popcorn-kernel/popcorn)
+![Discord](https://img.shields.io/discord/1128805264628383784?color=%235865F2&link=https%3A%2F%2Fdiscord.gg%2Fd9974fz5sS)
 
 </div>
 
