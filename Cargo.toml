@@ -18,4 +18,4 @@ features = ["spin_no_std"]
 
 
 [package.metadata.bootimage]
-run-command = ["qemu-system-x86_64", "-s", "-S", "-drive", "format=raw,file={}"]
+run-command = ["qemu-system-x86_64", "-s",  "-drive", "format=raw,file={}"]
