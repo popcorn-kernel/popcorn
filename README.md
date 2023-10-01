@@ -1,10 +1,9 @@
 <div align="center">
-
-# The Popcorn Kernel
-
+<img src="https://cdn.discordapp.com/attachments/1128849819444715620/1129153641010450483/popcorn.png?ex=651a8506&is=65193386&hm=8eb904ec9e8725edece937c2c669c5172fc87dc09fb51c160eaab5a61429459a&" style="width: 15%;"></img>
+<h1>The Popcorn Kernel</h1>
 </div>
 
-Welcome to the Popcorn Kernel project! Our mission is to build a powerful and innovative kernel within the TRANS ecosystem. We aim to create a robust and efficient operating system that enhances user experience while promoting inclusivity and diversity.
+Welcome to the Popcorn Kernel project! Our mission is to learn more about operating systems and expand our coding and developing skills.
 
 <div align="center">
 
@@ -18,15 +17,15 @@ Welcome to the Popcorn Kernel project! Our mission is to build a powerful and in
 
 </div>
 
-## About TRANS Ecosystem
-TRANS Ecosystem is an open-source community dedicated to developing cutting-edge technologies and software. It fosters collaboration and encourages contributions from developers worldwide. TRANS Ecosystem embraces values of equality, respect, and tolerance, supporting all individuals regardless of their gender identity, race, or background.
+## About (USERSPACE) Ecosystem
+TRANS Ecosystem is an open-source community dedicated to developing alternatives and having fun!  TRANS Ecosystem embraces values of equality, respect, and tolerance, supporting all individuals regardless of their gender identity, race, or background.
 
 ## Project Goals
-- Innovation: Popcorn Kernel aims to introduce groundbreaking features and functionalities that enhance the user's computing experience.
+- Innovation: The Popcorn Kernel will be a new and fresh cut on the operating system side.
 
-- Efficiency: We strive to develop a highly optimized kernel that maximizes system performance and resource utilization.
+- Efficiency: We want to create a highly optimized kernel that aims maximizes system performance.
 
-- Accessibility: Popcorn Kernel will be designed to ensure inclusivity and provide a seamless experience for all users, regardless of their abilities.
+- Accessibility: The Popcorn Kernel will be designed to ensure inclusivity and provide a seamless experience for all users, regardless of their abilities.
 
 ## Features
 - Customizability: Popcorn Kernel offers extensive customization options, allowing users to personalize their computing environment according to their preferences.

@@ -1,53 +1,34 @@
-#![no_std]
-#![cfg_attr(test, no_main)]
-#![feature(custom_test_frameworks)]
+#![no_std] // don't link the Rust standard library
 #![feature(abi_x86_interrupt)]
-#![test_runner(crate::testutils::test_runner)]
-#![feature(panic_info_message)]
-#![feature(fmt_internals)]
-#![reexport_test_harness_main = "test_main"]
 #![allow(clippy::missing_safety_doc)]
 
 extern crate alloc;
 
-use crate::system::vga_buffer::Color;
-pub mod kernel;
-pub mod system;
-pub mod testutils;
+use bootloader::BootInfo;
+use low_level::{gdt, interrupts, memory::{self, PopFrameAllocator}, allocator};
+use x86_64::VirtAddr;
 
-/**
- * @brief Initializes the kernel.
- * @details This function initializes the kernel. Call this function before doing anything else.
- * To be used in Main, and to be used in Tests.
- */
-pub fn init() {
-    system::init_system();
+pub mod low_level;
+
+pub fn init(boot_info: &'static BootInfo) {
+    gdt::init();
+    interrupts::init_idt();
+    unsafe { interrupts::PICS.lock().initialize() };
+    x86_64::instructions::interrupts::enable();
+
+    let phys_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
+
+    let mut mapper = unsafe { memory::init(phys_mem_offset) };
+    let mut frame_allocator = unsafe {
+        PopFrameAllocator::init(&boot_info.memory_map)
+    };
+
+    allocator::init_heap(&mut mapper, &mut frame_allocator)
+        .expect("heap initialization failed");
 }
 
-/**
- * @brief Shuts down the kernel.
- * @details This function clears the screen, then shuts down the kernel, then shuts down the computer.
- * You should be able to call this anywhere if needed.
- */
-pub fn shutdown() {
-    clear_screen!(Color::Black);
-    set_color!(Color::White, Color::Black);
-    println!("Shutting down...");
-
-    // Put deinitialization code here.
-
-    // Stop processor
-    system::task::hlt_loop();
-}
-
-#[cfg(test)]
-entry_point!(test_kernel_main);
-
-/// Entry point for `cargo xtest`
-#[cfg(test)]
-fn test_kernel_main(_boot_info: &'static BootInfo) -> ! {
-    use crate::kernel;
-    kernel::init_kernel();
-    test_main();
-    hlt_loop();
+pub fn hlt_loop() -> ! {
+    loop {
+        x86_64::instructions::hlt();
+    }
 }
