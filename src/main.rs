@@ -2,7 +2,6 @@
 #![no_main] // disable all Rust-level entry points
 
 use core::panic::PanicInfo;
-#[macro_use]
 extern crate alloc;
 
 /// This function is called on panic.
