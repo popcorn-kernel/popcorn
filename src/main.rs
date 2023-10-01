@@ -19,6 +19,7 @@ fn kernel_main(_boot_info: &'static BootInfo) -> ! {
     print!("Welcome to the ");
     set_color!(Color::LightBlue, Color::Black);
     println!("Popcorn Kernel!");
+    set_color!(Color::White, Color::Black);
     init();
 
     hlt_loop();
