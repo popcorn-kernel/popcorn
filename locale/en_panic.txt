@@ -1,0 +1,19 @@
+      An unrecoverable error has occurred, and the system must shut down.
+     You can submit an issue at https://github.com/popcorn-kernel/popcorn/issues.
+
+================================INSTRUCTIONS===================================
+This error typically occurs when a critical system function encounters an
+unexpected condition or error, leading to an unrecoverable state.
+
+If this is the first time you have seen this error, please reboot your system.
+After rebooting, if you see this again, check any new hardware or software.
+
+If you are able to reproduce this error intentionally, please submit an issue
+at the above URL with all below information.
+============================TECHNICAL INFORMATION==============================
+INST_PTR:   0x{2:0>16x}     CODE_SEG:   0x{3:0>16x}
+CPU_FLAGS:  0x{4:0>16x}     STACK_PTR:  0x{5:0>16x}
+STACK_SEG:  0x{6:0>16x}     MEMORY:     0x{7:0>16x}
+CODE:       {8:?}
+MESSAGE:    {1}
+LINE:       {0}
