@@ -1,15 +1,30 @@
 #![no_std] // don't link the Rust standard library
 #![feature(abi_x86_interrupt)]
+#![allow(clippy::missing_safety_doc)]
 
-use low_level::{gdt, interrupts};
+extern crate alloc;
+
+use bootloader::BootInfo;
+use low_level::{gdt, interrupts, memory::{self, PopFrameAllocator}, allocator};
+use x86_64::VirtAddr;
 
 pub mod low_level;
 
-pub fn init() {
+pub fn init(boot_info: &'static BootInfo) {
     gdt::init();
     interrupts::init_idt();
     unsafe { interrupts::PICS.lock().initialize() };
     x86_64::instructions::interrupts::enable();
+
+    let phys_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
+
+    let mut mapper = unsafe { memory::init(phys_mem_offset) };
+    let mut frame_allocator = unsafe {
+        PopFrameAllocator::init(&boot_info.memory_map)
+    };
+
+    allocator::init_heap(&mut mapper, &mut frame_allocator)
+        .expect("heap initialization failed");
 }
 
 pub fn hlt_loop() -> ! {
