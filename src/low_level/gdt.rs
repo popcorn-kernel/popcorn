@@ -16,7 +16,7 @@ lazy_static! {
 
             //stack end!
             stack_start + STACK_SIZE
-            
+
         };
         tss
     };
