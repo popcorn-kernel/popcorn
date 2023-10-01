@@ -12,16 +12,21 @@ fn panic(info: &PanicInfo) -> ! {
 }
 
 use bootloader::{entry_point, BootInfo};
-use popcorn::{init, print, println, hlt_loop, set_color, clear_screen, low_level::vga_buffer::Color};
+use popcorn::{
+    clear_screen, hlt_loop, init,
+    low_level::vga_buffer::{Color, MessageToVga},
+    print, print_with_colors, println, set_color,
+};
 entry_point!(kernel_main);
 
 fn kernel_main(boot_info: &'static BootInfo) -> ! {
     clear_screen!(Color::Black);
-    print!("Welcome to the ");
-    set_color!(Color::LightBlue, Color::Black);
-    println!("Popcorn Kernel!");
-    set_color!(Color::White, Color::Black);
-    
+
+    print_with_colors!(
+        MessageToVga::new(Color::Yellow, Color::Black, "Welcome to the "),
+        MessageToVga::new(Color::LightBlue, Color::Black, "Popcorn Kernel!\n")
+    );
+
     init(boot_info);
 
     hlt_loop();

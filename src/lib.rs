@@ -5,7 +5,10 @@
 extern crate alloc;
 
 use bootloader::BootInfo;
-use low_level::{gdt, interrupts, memory::{self, PopFrameAllocator}, allocator};
+use low_level::{
+    allocator, gdt, interrupts,
+    memory::{self, PopFrameAllocator},
+};
 use x86_64::VirtAddr;
 
 pub mod low_level;
@@ -19,12 +22,9 @@ pub fn init(boot_info: &'static BootInfo) {
     let phys_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
 
     let mut mapper = unsafe { memory::init(phys_mem_offset) };
-    let mut frame_allocator = unsafe {
-        PopFrameAllocator::init(&boot_info.memory_map)
-    };
+    let mut frame_allocator = unsafe { PopFrameAllocator::init(&boot_info.memory_map) };
 
-    allocator::init_heap(&mut mapper, &mut frame_allocator)
-        .expect("heap initialization failed");
+    allocator::init_heap(&mut mapper, &mut frame_allocator).expect("heap initialization failed");
 }
 
 pub fn hlt_loop() -> ! {
