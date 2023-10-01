@@ -15,7 +15,8 @@ lazy_static! {
             let stack_start = VirtAddr::from_ptr(unsafe { &STACK });
 
             //stack end!
-            stack_start + STACK_SIZE;
+            let stack_end = stack_start + STACK_SIZE;
+            stack_end
             
         };
         tss
