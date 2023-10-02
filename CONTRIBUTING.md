@@ -14,7 +14,7 @@ you can also contribute in other ways, like opening an issue!
 
 ### Issues
 
-If you are expiriancing some kind of issue or you have an idea, tell us! Open an issue in the issues tab and explain it. Make sure that you are giving all the information you have.
+If you are experiencing some kind of issue or you have an idea, tell us! Open an issue in the issues tab and explain it. Make sure that you are giving all the information you have.
 
 #### Create a new issue
 
@@ -22,7 +22,7 @@ If you spot a problem with the docs, [search if an issue already exists](https:/
 
 #### Solve an issue
 
-Scan through our [existing issues](https://github.com/github/docs/issues) to find one that interests you. You can narrow down the search using `labels` as filters.
+Scan through our [existing issues](https://github.com/popcorn-kernel/popcorn/issues) to find one that interests you. You can narrow down the search using `labels` as filters.
 
 ### Make Changes
 
@@ -31,23 +31,18 @@ Please follow our [project manager](https://github.com/orgs/popcorn-kernel/proje
 #### Make changes locally
 
 1. Fork the repository.
-- Using GitHub Desktop:
-  - [Getting started with GitHub Desktop](https://docs.github.com/en/desktop/installing-and-configuring-github-desktop/getting-started-with-github-desktop) will guide you through setting up Desktop.
-  - Once Desktop is set up, you can use it to [fork the repo](https://docs.github.com/en/desktop/contributing-and-collaborating-using-github-desktop/cloning-and-forking-repositories-from-github-desktop)!
+2. [Fork the repo](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo#fork-an-example-repository) so that you can make your changes without affecting the original project until you're ready to merge them.
 
-- Using the command line:
-  - [Fork the repo](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo#fork-an-example-repository) so that you can make your changes without affecting the original project until you're ready to merge them.
-
-2. Create a working branch and start with your changes!
+3. Create a working branch and start with your changes!
 
 ### Commit your update
 
-Commit the changes once you are happy with them. Don't forget to self-review to speed up the review process:zap:.
+Commit the changes once you are happy with them. Don't forget to self-review to speed up the review process.
 
 ### Pull Request
 
 When you're finished with the changes, create a pull request, also known as a PR.
-- Fill the "Ready for review" template so that we can review your PR. This template helps reviewers understand your changes as well as the purpose of your pull request.
+- Fill the information about the changes so that we can review your PR.
 - Don't forget to [link PR to issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue) if you are solving one.
 - Enable the checkbox to [allow maintainer edits](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/allowing-changes-to-a-pull-request-branch-created-from-a-fork) so the branch can be updated for a merge.
 Once you submit your PR, a Docs team member will review your proposal. We may ask questions or request additional information.
