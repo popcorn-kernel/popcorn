@@ -35,15 +35,8 @@ The PURE Ecosystem is an open-source community dedicated to developing alternati
 - Compatibility: Popcorn Kernel aims to support a wide range of hardware configurations and software applications to ensure compatibility across different systems.
 
 ## Contributing
-We welcome contributions from developers, designers, and enthusiasts who share our vision for an inclusive and powerful kernel. To contribute to the Popcorn Kernel project, please follow these steps:
 
-Fork the repository and create a new branch for your contribution.
-
-Make your desired changes or add new features to the codebase.
-
-Test thoroughly and ensure your changes do not introduce any regressions.
-
-Submit a pull request, describing your changes and their purpose clearly.
+We welcome contributions from developers, designers, and enthusiasts who share our vision for an inclusive and powerful kernel. To contribute to the Popcorn Kernel project, please Read our (guide.)[https://github.com/popcorn-kernel/popcorn/blob/main/CONTRIBUTING.md]
 
 ## Getting Started
 ### Prerequisites
