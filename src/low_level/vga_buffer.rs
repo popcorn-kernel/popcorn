@@ -62,7 +62,10 @@ impl Writer {
             self.next_line();
             return;
         }
-
+        self.set_char(byte);
+        
+    }
+    fn set_char(&mut self, byte: u8) {
         self.buffer.chars[BUFFER_HEIGHT - 1][self.column_position] = Char {
             ascii_character: byte,
             color_code: self.color_code,
