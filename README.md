@@ -36,7 +36,7 @@ The PURE Ecosystem is an open-source community dedicated to developing alternati
 
 ## Contributing
 
-We welcome contributions from developers, designers, and enthusiasts who share our vision for an inclusive and powerful kernel. To contribute to the Popcorn Kernel project, please Read our (guide.)[https://github.com/popcorn-kernel/popcorn/blob/main/CONTRIBUTING.md]
+We welcome contributions from developers, designers, and enthusiasts who share our vision for an inclusive and powerful kernel. To contribute to the Popcorn Kernel project, please Read our [guide.](https://github.com/popcorn-kernel/popcorn/blob/main/CONTRIBUTING.md)
 
 ## Getting Started
 ### Prerequisites
