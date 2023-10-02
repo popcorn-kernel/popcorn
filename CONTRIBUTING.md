@@ -10,9 +10,11 @@ In this guide you will get an overview of the contribution workflow from opening
 
 Read our README.md and get familiar with the code base! If you need help, join our [discord](https://discord.gg/2cf6b4sdzM) and we will help you.
 
-If you wanna 
+If can also contribiot in other ways, like opening an issue!
 
 ### Issues
+
+If you are expiriancing some kind of issue or you have an idea, tell us! Open an issue in the issues tab and explain it. Make sure that you are giving all the information you have.
 
 #### Create a new issue
 
