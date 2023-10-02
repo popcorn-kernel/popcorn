@@ -17,8 +17,8 @@ Welcome to the Popcorn Kernel project! Our mission is to learn more about operat
 
 </div>
 
-## About (USERSPACE) Ecosystem
-TRANS Ecosystem is an open-source community dedicated to developing alternatives and having fun!  TRANS Ecosystem embraces values of equality, respect, and tolerance, supporting all individuals regardless of their gender identity, race, or background.
+## About PURE Ecosystem
+The PURE Ecosystem is an open-source community dedicated to developing alternatives and having fun! The PURE Ecosystem embraces values of equality, respect, and tolerance, supporting all individuals regardless of their gender identity, race, or background.
 
 ## Project Goals
 - Innovation: The Popcorn Kernel will be a new and fresh cut on the operating system side.
