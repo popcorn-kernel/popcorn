@@ -15,7 +15,7 @@ use bootloader::{entry_point, BootInfo};
 use popcorn::{
     clear_screen, hlt_loop, init,
     low_level::vga_buffer::{Color, MessageToVga},
-    print, print_with_colors, println, set_color,
+    print_with_colors, println, set_color,
 };
 entry_point!(kernel_main);
 

@@ -14,10 +14,7 @@ use x86_64::VirtAddr;
 pub mod low_level;
 
 pub fn init(boot_info: &'static BootInfo) {
-    gdt::init();
-    interrupts::init_idt();
-    unsafe { interrupts::PICS.lock().initialize() };
-    x86_64::instructions::interrupts::enable();
+    initialize_gdt_and_interrupts();
 
     let phys_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
 
@@ -31,4 +28,10 @@ pub fn hlt_loop() -> ! {
     loop {
         x86_64::instructions::hlt();
     }
+}
+fn initialize_gdt_and_interrupts() {
+    gdt::init();
+    interrupts::init_idt();
+    unsafe { interrupts::PICS.lock().initialize() };
+    x86_64::instructions::interrupts::enable();
 }
