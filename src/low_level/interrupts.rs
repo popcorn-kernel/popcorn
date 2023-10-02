@@ -71,8 +71,8 @@ extern "x86-interrupt" fn keyboard_interrupt_handler(_stack_frame: InterruptStac
     if let Ok(Some(key_event)) = keyboard.add_byte(scancode) {
         if let Some(key) = keyboard.process_keyevent(key_event) {
             match key {
-                DecodedKey::Unicode(character) => print!("{}", character),
-                DecodedKey::RawKey(key) => print!("{:?}", key),
+                DecodedKey::Unicode(character) => handle_keypress(character),
+                DecodedKey::RawKey(keycode) => handle_raw_keypress(keycode),
             }
         }
     }
@@ -110,5 +110,21 @@ impl InterruptIndex {
 
     fn as_usize(self) -> usize {
         usize::from(self.as_u8())
+    }
+}
+//Backspace is implemented twice because even though it has a rawkey, its registered as Unicode.
+//If in some case it would be a raw key, it would cause bugs
+
+fn handle_keypress(key: char) {
+    match key {
+        '\u{8}' => super::vga_buffer::backspace(),
+        _ => print!("{}", key),
+    }
+}
+use pc_keyboard::KeyCode;
+fn handle_raw_keypress(key: KeyCode) {
+    match key {
+        KeyCode::Backspace => super::vga_buffer::backspace(),
+        _ => print!("{:?}", key),
     }
 }

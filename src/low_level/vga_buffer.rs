@@ -1,4 +1,4 @@
-use core::fmt;
+use core::fmt::{self, Write};
 use lazy_static::lazy_static;
 use spin::Mutex;
 use x86_64::instructions::interrupts;
@@ -62,15 +62,14 @@ impl Writer {
             self.next_line();
             return;
         }
+        self.column_position += 1;
         self.set_char(byte);
-        
     }
     fn set_char(&mut self, byte: u8) {
         self.buffer.chars[BUFFER_HEIGHT - 1][self.column_position] = Char {
             ascii_character: byte,
             color_code: self.color_code,
         };
-        self.column_position += 1;
     }
     fn next_line(&mut self) {
         for row in 1..BUFFER_HEIGHT {
@@ -85,7 +84,6 @@ impl Writer {
             ascii_character: b' ',
             color_code: ColorCode::new(color, color),
         };
-
         for row in 0..BUFFER_HEIGHT {
             for col in 0..BUFFER_WIDTH {
                 self.buffer.chars[row][col] = blank;
@@ -110,6 +108,13 @@ impl Writer {
 
     fn set_color(&mut self, foreground: Color, background: Color) {
         self.color_code = ColorCode::new(foreground, background);
+    }
+    pub fn backspace(&mut self) {
+        if self.column_position == 0 {
+            return;
+        }
+        self.set_char(b' ');
+        self.column_position -= 1;
     }
 }
 
@@ -141,8 +146,6 @@ macro_rules! println {
 
 #[doc(hidden)]
 pub fn _print(args: fmt::Arguments) {
-    use core::fmt::Write;
-
     interrupts::without_interrupts(|| {
         WRITER.lock().write_fmt(args).unwrap();
     });
@@ -217,4 +220,9 @@ impl<'a> MessageToVga<'a> {
             string,
         }
     }
+}
+pub fn backspace() {
+    interrupts::without_interrupts(|| {
+        WRITER.lock().backspace();
+    });
 }
