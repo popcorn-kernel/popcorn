@@ -1,8 +1,8 @@
+use crate::print;
 use core::fmt::{self, Write};
 use lazy_static::lazy_static;
 use spin::Mutex;
 use x86_64::instructions::interrupts;
-
 #[allow(dead_code)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(u8)]
@@ -170,75 +170,25 @@ lazy_static! {
     });
 }
 
-#[macro_export]
-macro_rules! print {
-    ($($arg:tt)*) => ($crate::low_level::vga_buffer::_print(format_args!($($arg)*)));
-}
-
-#[macro_export]
-macro_rules! println {
-    () => ($crate::print!("\n"));
-    ($($arg:tt)*) => ($crate::print!("{}\n", format_args!($($arg)*)));
-}
-
 #[doc(hidden)]
-pub fn _print(args: fmt::Arguments) {
+pub fn print(args: fmt::Arguments) {
     interrupts::without_interrupts(|| {
         WRITER.lock().write_fmt(args).unwrap();
     });
 }
 
-/// Sets the foreground and background color for the VGA text buffer.
-/// Accepts two `Color` enum values.
-/// See the `Color` enum for available colors.
-/// The first argument is the foreground color, the second is the background color.
-#[macro_export]
-macro_rules! set_color {
-    ($foreground:expr, $background:expr) => {
-        $crate::low_level::vga_buffer::_set_color($foreground, $background)
-    };
-}
-
-/// Clears the screen with the given color.
-/// Accepts a `Color` enum value.
-/// See the `Color` enum for available colors.
-#[macro_export]
-macro_rules! clear_screen {
-    ($clear_color:expr) => {
-        $crate::low_level::vga_buffer::_clear_screen($clear_color);
-    };
-}
-
-/**
- *  \brief Sets the foreground and background color for the VGA text buffer.
- *  This function is called by the `set_color!` macro.
- *  \param foreground The foreground color.
- *  \param background The background color.
- */
-#[doc(hidden)]
-pub fn _set_color(foreground: Color, background: Color) {
+pub fn set_color(foreground: Color, background: Color) {
     interrupts::without_interrupts(|| {
         WRITER.lock().set_color(foreground, background);
     });
 }
 
-#[doc(hidden)]
-pub fn _clear_screen(color: Color) {
+pub fn clear_screen(color: Color) {
     interrupts::without_interrupts(|| {
         WRITER.lock().clear_screen(color);
     });
 }
-#[macro_export]
-macro_rules! print_with_colors {
-    ( $( $x:expr ),* ) => {
-        {
-            $(
-                $x.print_to_vga();
-            )*
-        }
-        set_color!(Color::White, Color::Black);
-    };
-}
+
 pub struct MessageToVga<'a> {
     foreground: Color,
     background: Color,
@@ -247,7 +197,7 @@ pub struct MessageToVga<'a> {
 
 impl<'a> MessageToVga<'a> {
     pub fn print_to_vga(&self) {
-        set_color!(self.foreground, self.background);
+        set_color(self.foreground, self.background);
         print!("{}", self.string);
     }
     pub fn new(foreground: Color, background: Color, string: &'a str) -> Self {

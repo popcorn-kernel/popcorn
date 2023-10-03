@@ -12,7 +12,7 @@ use low_level::{
 use x86_64::VirtAddr;
 
 pub mod low_level;
-
+pub mod userspace;
 pub fn init(boot_info: &'static BootInfo) {
     initialize_gdt_and_interrupts();
 
