@@ -23,7 +23,7 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
     print_with_colors!(
         MessageToVga::new(Color::Yellow, Color::Black, "Welcome to the "),
         MessageToVga::new(Color::LightBlue, Color::Black, "Popcorn Kernel!"),
-        MessageToVga::new(Color::White, Color::Black, "\n")
+        MessageToVga::new(Color::White, Color::Black, "\n") //Newline being other than black and white caused a bug with the cursor
     );
 
     init(boot_info);
