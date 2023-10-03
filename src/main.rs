@@ -22,7 +22,8 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
 
     print_with_colors!(
         MessageToVga::new(Color::Yellow, Color::Black, "Welcome to the "),
-        MessageToVga::new(Color::LightBlue, Color::Black, "Popcorn Kernel!\n")
+        MessageToVga::new(Color::LightBlue, Color::Black, "Popcorn Kernel!"),
+        MessageToVga::new(Color::White, Color::Black, "\n")
     );
 
     init(boot_info);
