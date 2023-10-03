@@ -1,10 +1,16 @@
 use lazy_static::lazy_static;
 use x86_64::structures::idt::{InterruptDescriptorTable, InterruptStackFrame, PageFaultErrorCode};
 
-use crate::{hlt_loop, low_level::gdt, print, println};
+use crate::{
+    hlt_loop,
+    low_level::{
+        gdt,
+        user_interface::{handle_keypress, handle_raw_keypress},
+    },
+    println,
+};
 use pic8259::ChainedPics;
 use spin;
-
 pub const PIC_1_OFFSET: u8 = 32;
 pub const PIC_2_OFFSET: u8 = PIC_1_OFFSET + 8;
 
@@ -76,7 +82,6 @@ extern "x86-interrupt" fn keyboard_interrupt_handler(_stack_frame: InterruptStac
             }
         }
     }
-
     unsafe {
         PICS.lock()
             .notify_end_of_interrupt(InterruptIndex::Keyboard.as_u8());
@@ -110,21 +115,5 @@ impl InterruptIndex {
 
     fn as_usize(self) -> usize {
         usize::from(self.as_u8())
-    }
-}
-//Backspace is implemented twice because even though it has a rawkey, its registered as Unicode.
-//If in some case it would be a raw key, it would cause bugs
-
-fn handle_keypress(key: char) {
-    match key {
-        '\u{8}' => super::vga_buffer::backspace(),
-        _ => print!("{}", key),
-    }
-}
-use pc_keyboard::KeyCode;
-fn handle_raw_keypress(key: KeyCode) {
-    match key {
-        KeyCode::Backspace => super::vga_buffer::backspace(),
-        _ => print!("{:?}", key),
     }
 }

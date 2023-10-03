@@ -24,7 +24,6 @@ pub enum Color {
     Yellow = 0x0E,
     White = 0x0F,
 }
-
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(transparent)]
 struct ColorCode(u8);
@@ -44,7 +43,9 @@ struct Char {
 
 const BUFFER_HEIGHT: usize = 25;
 const BUFFER_WIDTH: usize = 80;
-
+const ACTUAL_BUFFER_WIDTH: usize = 50;
+//Added because input stopped working after user tried to enter the 51 character.
+//Probably qemu issue, maybe there is a way, but this is the temporary fix
 #[repr(transparent)]
 struct Buffer {
     chars: [[Char; BUFFER_WIDTH]; BUFFER_HEIGHT],
@@ -58,7 +59,7 @@ pub struct Writer {
 
 impl Writer {
     pub fn write_byte(&mut self, byte: u8) {
-        if byte == b'\n' || self.column_position >= BUFFER_WIDTH {
+        if byte == b'\n' || self.column_position >= ACTUAL_BUFFER_WIDTH {
             self.next_line();
             return;
         }
