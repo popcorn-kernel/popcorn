@@ -137,6 +137,18 @@ impl Writer {
         self.set_char(b' ');
         self.move_cursor(self.column_position - 1);
     }
+    fn cursor_back(&mut self) {
+        if self.column_position == 0 {
+            return;
+        }
+        self.move_cursor(self.column_position - 1)
+    }
+    fn cursor_front(&mut self) {
+        if self.column_position == ACTUAL_BUFFER_WIDTH {
+            return;
+        }
+        self.move_cursor(self.column_position + 1)
+    }
 }
 
 impl fmt::Write for Writer {
@@ -245,5 +257,15 @@ impl<'a> MessageToVga<'a> {
 pub fn backspace() {
     interrupts::without_interrupts(|| {
         WRITER.lock().backspace();
+    });
+}
+pub fn cursor_back() {
+    interrupts::without_interrupts(|| {
+        WRITER.lock().cursor_back();
+    });
+}
+pub fn cursor_front() {
+    interrupts::without_interrupts(|| {
+        WRITER.lock().cursor_front();
     });
 }
