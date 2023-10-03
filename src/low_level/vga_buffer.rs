@@ -35,12 +35,12 @@ impl ColorCode {
     fn generate(foreground: u8, background: u8) -> ColorCode {
         ColorCode((background) << 4 | (foreground))
     }
-    fn get_colors(&self) -> (u8,u8){
-        ( self.0 % 16u8, self.0 >> 4u8)
+    fn get_colors(&self) -> (u8, u8) {
+        (self.0 % 16u8, self.0 >> 4u8)
     }
     fn invert(&mut self) {
         let colors = self.get_colors();
-        *self = Self::generate(colors.1,colors.0)
+        *self = Self::generate(colors.1, colors.0)
     }
 }
 
@@ -74,15 +74,13 @@ pub struct Writer {
 
 impl Writer {
     pub fn move_cursor(&mut self, column_position: usize) {
-    
-        self.buffer.chars[BUFFER_HEIGHT - 1][self.column_position+1].invert_colors();
+        self.buffer.chars[BUFFER_HEIGHT - 1][self.column_position + 1].invert_colors();
         if column_position == 0 {
             self.next_line();
-        }
-        else {
+        } else {
             self.column_position = column_position;
         }
-        self.buffer.chars[BUFFER_HEIGHT - 1][self.column_position+1].invert_colors();
+        self.buffer.chars[BUFFER_HEIGHT - 1][self.column_position + 1].invert_colors();
     }
     pub fn write_byte(&mut self, byte: u8) {
         if byte == b'\n' || self.column_position >= ACTUAL_BUFFER_WIDTH {
