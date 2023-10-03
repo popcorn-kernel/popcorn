@@ -30,7 +30,17 @@ struct ColorCode(u8);
 
 impl ColorCode {
     fn new(foreground: Color, background: Color) -> ColorCode {
-        ColorCode((background as u8) << 4 | (foreground as u8))
+        Self::generate(foreground as u8, background as u8)
+    }
+    fn generate(foreground: u8, background: u8) -> ColorCode {
+        ColorCode((background) << 4 | (foreground))
+    }
+    fn get_colors(&self) -> (u8, u8) {
+        (self.0 % 16u8, self.0 >> 4u8)
+    }
+    fn invert(&mut self) {
+        let colors = self.get_colors();
+        *self = Self::generate(colors.1, colors.0)
     }
 }
 
@@ -39,6 +49,11 @@ impl ColorCode {
 struct Char {
     ascii_character: u8,
     color_code: ColorCode,
+}
+impl Char {
+    fn invert_colors(&mut self) {
+        self.color_code.invert();
+    }
 }
 
 const BUFFER_HEIGHT: usize = 25;
@@ -58,12 +73,21 @@ pub struct Writer {
 }
 
 impl Writer {
+    pub fn move_cursor(&mut self, column_position: usize) {
+        self.buffer.chars[BUFFER_HEIGHT - 1][self.column_position + 1].invert_colors();
+        if column_position == 0 {
+            self.next_line();
+        } else {
+            self.column_position = column_position;
+        }
+        self.buffer.chars[BUFFER_HEIGHT - 1][self.column_position + 1].invert_colors();
+    }
     pub fn write_byte(&mut self, byte: u8) {
         if byte == b'\n' || self.column_position >= ACTUAL_BUFFER_WIDTH {
-            self.next_line();
+            self.move_cursor(0);
             return;
         }
-        self.column_position += 1;
+        self.move_cursor(self.column_position + 1);
         self.set_char(byte);
     }
     fn set_char(&mut self, byte: u8) {
@@ -115,7 +139,19 @@ impl Writer {
             return;
         }
         self.set_char(b' ');
-        self.column_position -= 1;
+        self.move_cursor(self.column_position - 1);
+    }
+    fn cursor_back(&mut self) {
+        if self.column_position == 0 {
+            return;
+        }
+        self.move_cursor(self.column_position - 1)
+    }
+    fn cursor_front(&mut self) {
+        if self.column_position == ACTUAL_BUFFER_WIDTH {
+            return;
+        }
+        self.move_cursor(self.column_position + 1)
     }
 }
 
@@ -225,5 +261,15 @@ impl<'a> MessageToVga<'a> {
 pub fn backspace() {
     interrupts::without_interrupts(|| {
         WRITER.lock().backspace();
+    });
+}
+pub fn cursor_back() {
+    interrupts::without_interrupts(|| {
+        WRITER.lock().cursor_back();
+    });
+}
+pub fn cursor_front() {
+    interrupts::without_interrupts(|| {
+        WRITER.lock().cursor_front();
     });
 }
