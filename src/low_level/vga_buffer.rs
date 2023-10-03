@@ -50,6 +50,11 @@ struct Char {
     ascii_character: u8,
     color_code: ColorCode,
 }
+impl Char {
+    fn invert_colors(&mut self) {
+        self.color_code.invert();
+    }
+}
 
 const BUFFER_HEIGHT: usize = 25;
 const BUFFER_WIDTH: usize = 80;
@@ -69,14 +74,15 @@ pub struct Writer {
 
 impl Writer {
     pub fn move_cursor(&mut self, column_position: usize) {
-        self.buffer.chars[BUFFER_HEIGHT - 1][self.column_position].color_code.invert();
+    
+        self.buffer.chars[BUFFER_HEIGHT - 1][self.column_position+1].invert_colors();
         if column_position == 0 {
             self.next_line();
         }
         else {
             self.column_position = column_position;
         }
-        self.buffer.chars[BUFFER_HEIGHT - 1][self.column_position].color_code.invert();
+        self.buffer.chars[BUFFER_HEIGHT - 1][self.column_position+1].invert_colors();
     }
     pub fn write_byte(&mut self, byte: u8) {
         if byte == b'\n' || self.column_position >= ACTUAL_BUFFER_WIDTH {
