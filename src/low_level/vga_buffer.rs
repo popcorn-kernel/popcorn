@@ -189,7 +189,6 @@ pub fn clear_screen(color: Color) {
     });
 }
 
-
 pub fn backspace() {
     interrupts::without_interrupts(|| {
         WRITER.lock().backspace();

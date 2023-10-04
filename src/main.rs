@@ -13,7 +13,8 @@ use bootloader::{entry_point, BootInfo};
 use popcorn::{
     hlt_loop, init,
     low_level::vga_buffer::{clear_screen, Color},
-    print_with_colors, println, userspace::output::MessageToVga,
+    print_with_colors, println,
+    userspace::output::MessageToVga,
 };
 entry_point!(kernel_main);
 
