@@ -189,25 +189,7 @@ pub fn clear_screen(color: Color) {
     });
 }
 
-pub struct MessageToVga<'a> {
-    foreground: Color,
-    background: Color,
-    string: &'a str,
-}
 
-impl<'a> MessageToVga<'a> {
-    pub fn print_to_vga(&self) {
-        set_color(self.foreground, self.background);
-        print!("{}", self.string);
-    }
-    pub fn new(foreground: Color, background: Color, string: &'a str) -> Self {
-        MessageToVga {
-            foreground,
-            background,
-            string,
-        }
-    }
-}
 pub fn backspace() {
     interrupts::without_interrupts(|| {
         WRITER.lock().backspace();
