@@ -3,11 +3,9 @@ use x86_64::structures::idt::{InterruptDescriptorTable, InterruptStackFrame, Pag
 
 use crate::{
     hlt_loop,
-    low_level::{
-        gdt,
-        user_interface::{handle_keypress, handle_raw_keypress},
-    },
+    low_level::gdt,
     println,
+    userspace::user_interface::{handle_keypress, handle_raw_keypress},
 };
 use pic8259::ChainedPics;
 use spin;
