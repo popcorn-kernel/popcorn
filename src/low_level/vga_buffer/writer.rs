@@ -1,7 +1,8 @@
-use super::Color;
+use super::{
+    buffer::{Buffer, Char, ColorCode, BUFFER_HEIGHT, BUFFER_WIDTH},
+    Color,
+};
 use core::fmt;
-const BUFFER_HEIGHT: usize = 25;
-const BUFFER_WIDTH: usize = 80;
 const ACTUAL_BUFFER_WIDTH: usize = 50;
 //Added because input stopped working after user tried to enter the 51 character.
 //Probably qemu issue, maybe there is a way, but this is the temporary fix
@@ -111,37 +112,4 @@ impl fmt::Write for Writer {
         self.write_string(s);
         Ok(())
     }
-}
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[repr(transparent)]
-struct ColorCode(u8);
-impl ColorCode {
-    fn new(foreground: Color, background: Color) -> ColorCode {
-        Self::generate(foreground as u8, background as u8)
-    }
-    fn generate(foreground: u8, background: u8) -> ColorCode {
-        ColorCode((background) << 4 | (foreground))
-    }
-    fn get_colors(&self) -> (u8, u8) {
-        (self.0 % 16u8, self.0 >> 4u8)
-    }
-    fn invert(&mut self) {
-        let colors = self.get_colors();
-        *self = Self::generate(colors.1, colors.0)
-    }
-}
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[repr(C)]
-struct Char {
-    ascii_character: u8,
-    color_code: ColorCode,
-}
-impl Char {
-    fn invert_colors(&mut self) {
-        self.color_code.invert();
-    }
-}
-#[repr(transparent)]
-struct Buffer {
-    chars: [[Char; BUFFER_WIDTH]; BUFFER_HEIGHT],
 }

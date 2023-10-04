@@ -4,6 +4,7 @@ use spin::Mutex;
 use x86_64::instructions::interrupts;
 
 use crate::low_level::vga_buffer::writer::Writer;
+mod buffer;
 mod writer;
 #[allow(dead_code)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
