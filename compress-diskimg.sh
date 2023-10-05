@@ -22,8 +22,8 @@ fi
 
 # if all checks have passed, start building the kernel image
 # display the logo header first
-echo "compress-diskimg.sh - Compresses a bootable Popcorn disk image";
-echo "Copyright (c) 2023 The Popcorn Project. See LICENSE for more information";
+echo "compress-diskimg.sh - Compresses a bootable PURE/popcorn disk image";
+echo "Copyright (c) 2023 The popcorn Project. See LICENSE for more information";
 echo "";
 
 echo -e "\e[1m[INFO]\e[0m building disk image...";
@@ -50,5 +50,5 @@ fi
 echo -e "\e[1m[INFO]\e[0m Compressed disk image successfully, written to \"target/x86_64-arch/debug/bootimage-popcorn.bin.zst\"";
 
 # i mean those who work on popcorn must be nocturnal people so...
-echo -e "\e[1m[INFO]\e[0m Popcorn project wishes you a nice day!";
+echo -e "\e[1m[INFO]\e[0m PURE/popcorn project wishes you a nice day!";
 exit 0;
