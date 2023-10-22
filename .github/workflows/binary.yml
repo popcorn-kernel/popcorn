@@ -13,7 +13,7 @@ jobs:
 
     steps:
     - name: its not as shrimple as that
-      run: pwd
+      run: pwd && ls -la
     - name: Install rust toolchain
       uses: actions-rs/toolchain@v1
       with:
