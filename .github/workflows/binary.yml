@@ -23,8 +23,8 @@ jobs:
       run: rustup component add rust-src --toolchain nightly-x86_64-unknown-linux-gnu
     - name: Install deps
       run: cargo install bootimage
-    - name: is it as shrimple as that?
-      run: cd ..
+    - name: its not as shrimple as that
+      run: pwd && ls
     - name: Build
       run: cargo build --verbose --release
     - name: Compress Diskimg
