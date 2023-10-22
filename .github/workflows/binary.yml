@@ -1,0 +1,32 @@
+name: Binary (via GatoBot)
+
+on:
+  workflow_run:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Install rust toolchain
+      uses: actions-rs/toolchain@v1
+      with:
+          toolchain: nightly
+          target: x86_64-unknown-linux-gnu
+          override: true
+          components: rustfmt, clippy
+    - name: Add nightly-x86_64
+      run: rustup component add rust-src --toolchain nightly-x86_64-unknown-linux-gnu
+    - name: Install deps
+      run: cargo install bootimage
+    - name: Build
+      run: cargo build --verbose --release
+    - name: Compress Diskimg
+      run: ./compress-diskimg.sh
+    # for temporary debugging
+    - name: Run Tree (temporary debug measure)
+      run: tree
