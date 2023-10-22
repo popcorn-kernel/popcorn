@@ -28,6 +28,12 @@ jobs:
       run: cargo build --verbose --release
     - name: Compress Diskimg
       run: ./compress-diskimg.sh
-    # for temporary debugging
-    - name: Run Tree (temporary debug measure)
-      run: tree
+    - name: Generate SHA256 sum
+      run: sha256sum target/x86_64-arch/debug/bootimage-popcorn.bin.zst > sha256sum.txt
+    - name: Send to Discord
+      run: |
+        curl \
+          -F 'payload_json={"content": "New build of popcorn! Timestamp: <t:$(date +%s)>"}' \
+          -F "file1=@sha256sum.txt" \
+          -F "file2=@target/x86_64-arch/debug/bootimage-popcorn.bin.zst" \
+          ${{ secrets.WEBHOOK_URL }}
