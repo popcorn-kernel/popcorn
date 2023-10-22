@@ -33,6 +33,6 @@ jobs:
     - name: Send to Discord
       run: |
         curl \
-          -F "payload_json={\"content\": \"New build of popcorn! Timestamp: <t:$(date +%s)>\n```$(sha256sum target/x86_64-arch/debug/bootimage-popcorn.bin.zst)```\"}" \
+          -F "payload_json={\"content\": \"New build of popcorn! Timestamp: <t:$(date +%s)>\n\`\`\`$(sha256sum target/x86_64-arch/debug/bootimage-popcorn.bin.zst)\`\`\`\"}" \
           -F "file1=@target/x86_64-arch/debug/bootimage-popcorn.bin.zst" \
           ${{ secrets.WEBHOOK_URL }}
