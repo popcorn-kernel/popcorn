@@ -33,7 +33,7 @@ jobs:
     - name: Send to Discord
       run: |
         curl \
-          -F 'payload_json={"content": "New build of popcorn! Timestamp: <t:$(date +%s)>"}' \
+          -F "payload_json={\"content\": \"New build of popcorn! Timestamp: <t:$(date +%s)>\"}" \
           -F "file1=@sha256sum.txt" \
           -F "file2=@target/x86_64-arch/debug/bootimage-popcorn.bin.zst" \
           ${{ secrets.WEBHOOK_URL }}
