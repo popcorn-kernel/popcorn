@@ -12,6 +12,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: its not as shrimple as that
+      run: pwd
     - name: Install rust toolchain
       uses: actions-rs/toolchain@v1
       with:
@@ -19,12 +21,14 @@ jobs:
           target: x86_64-unknown-linux-gnu
           override: true
           components: rustfmt, clippy
+    - name: its not as shrimple as that
+      run: pwd
     - name: Add nightly-x86_64
       run: rustup component add rust-src --toolchain nightly-x86_64-unknown-linux-gnu
     - name: Install deps
       run: cargo install bootimage
     - name: its not as shrimple as that
-      run: pwd && ls
+      run: pwd
     - name: Build
       run: cargo build --verbose --release
     - name: Compress Diskimg
