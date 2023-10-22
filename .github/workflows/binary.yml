@@ -24,8 +24,8 @@ jobs:
       run: rustup component add rust-src --toolchain nightly-x86_64-unknown-linux-gnu
     - name: Install deps
       run: ./configure.sh
-    - name: Build
-      run: cargo build --verbose --release
+    #- name: Build
+    #  run: cargo build --verbose --release
     - name: Compress Diskimg
       run: ./compress-diskimg.sh
     - name: Generate SHA256 sum
