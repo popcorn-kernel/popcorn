@@ -14,7 +14,7 @@ use popcorn::{
     hlt_loop, init,
     low_level::vga_buffer::{clear_screen, Color},
     print_with_colors, println,
-    userspace::output::MessageToVga,
+    userspace::output::MessageToVga, log, warn, error,
 };
 entry_point!(kernel_main);
 
@@ -26,7 +26,9 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
         MessageToVga::new(Color::LightBlue, Color::Black, "Popcorn Kernel!")
     );
     println!(); //Newline being other than black and white caused a bug with the cursor
+    log!("Initializing...");
     init(boot_info);
+    log!("Initialized!");
 
     hlt_loop();
 }
