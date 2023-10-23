@@ -30,9 +30,5 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
     init(boot_info);
     log!("Initialized!");
 
-    log!("This is a test log message");
-    warn!("This is a test warning message");
-    error!("This is a test error message");
-
     hlt_loop();
 }
