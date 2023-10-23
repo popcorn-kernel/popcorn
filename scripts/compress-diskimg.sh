@@ -2,9 +2,6 @@
 # compresses the popcorn disk image with zstd
 # using compression level 19
 
-# workaround for this now being in the scripts directory
-cd ..
-
 # check if `zstd` is present
 if ! command -v zstd; then
 	echo -e "\e[1;31merror:\e[0m command \"zstd\" is not present" 1>&2;
