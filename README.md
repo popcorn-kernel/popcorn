@@ -49,7 +49,7 @@ We welcome contributions from developers, designers, and enthusiasts who share o
 
 ### Building and Running
 Before building the kernel, you must first install the required dependencies. To install the dependencies, run the following command:
-```./configure.sh```
+```./scripts/configure.sh```
 
 To build the kernel, run the following command:
 ```cargo bootimage```

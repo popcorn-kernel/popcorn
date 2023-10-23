@@ -28,6 +28,7 @@ echo "";
 
 echo -e "\e[1m[INFO]\e[0m building disk image...";
 echo -e "\e[1m[\e[1;36mEXEC\e[0m\e[1m]\e[0m cargo -v bootimage -v";
+
 # build the bootimage with verbose output
 cargo -v bootimage -v;
 
