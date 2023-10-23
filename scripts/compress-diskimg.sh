@@ -2,6 +2,9 @@
 # compresses the popcorn disk image with zstd
 # using compression level 19
 
+# workaround for this now being in the scripts directory
+cd ..
+
 # check if `zstd` is present
 if ! command -v zstd; then
 	echo -e "\e[1;31merror:\e[0m command \"zstd\" is not present" 1>&2;
@@ -28,6 +31,7 @@ echo "";
 
 echo -e "\e[1m[INFO]\e[0m building disk image...";
 echo -e "\e[1m[\e[1;36mEXEC\e[0m\e[1m]\e[0m cargo -v bootimage -v";
+
 # build the bootimage with verbose output
 cargo -v bootimage -v;
 

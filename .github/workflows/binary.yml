@@ -25,11 +25,11 @@ jobs:
     - name: Add nightly-x86_64
       run: rustup component add rust-src --toolchain nightly-x86_64-unknown-linux-gnu
     - name: Install deps
-      run: ./configure.sh
+      run: ./scripts/configure.sh
     #- name: Build
     #  run: cargo build --verbose --release
     - name: Compress Diskimg
-      run: ./compress-diskimg.sh
+      run: ./scripts/compress-diskimg.sh
     #- name: Generate SHA256 sum
     #  run: sha256sum target/x86_64-arch/debug/bootimage-popcorn.bin.zst > sha256sum.txt
     - name: Send to Discord
