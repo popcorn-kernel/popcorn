@@ -26,14 +26,13 @@ Scan through our [existing issues](https://github.com/popcorn-kernel/popcorn/iss
 
 ### Make Changes
 
-Please follow our [project manager](https://github.com/orgs/popcorn-kernel/projects/1) and see if someone is working on the changed that you wanna add. Just rememeber that we only apply changed that we see fit.
+Please follow our [project manager](https://github.com/orgs/popcorn-kernel/projects/1) and see if someone is working on the changed that you want to add. Just rememeber that we only apply changed that we see fit.
 
 #### Make changes locally
 
-1. Fork the repository.
-2. [Fork the repo](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo#fork-an-example-repository) so that you can make your changes without affecting the original project until you're ready to merge them.
+1. [Fork the repo](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo#fork-an-example-repository) so that you can make your changes without affecting the original project until you're ready to merge them.
 
-3. Create a working branch and start with your changes!
+2. Create a working branch and start with your changes!
 
 ### Commit your update
 
