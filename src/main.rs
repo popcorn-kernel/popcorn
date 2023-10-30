@@ -11,15 +11,16 @@ fn panic(info: &PanicInfo) -> ! {
 
 use bootloader::{entry_point, BootInfo};
 use popcorn::{
-    hlt_loop, init,
-    low_level::vga_buffer::{clear_screen, Color},
+    error, hlt_loop, init, log,
+    low_level::vga_buffer::{send_command_to_writer, Color, CommandToWriter},
     print_with_colors, println,
-    userspace::output::MessageToVga, log, warn, error,
+    userspace::output::MessageToVga,
+    warn,
 };
 entry_point!(kernel_main);
 
 fn kernel_main(boot_info: &'static BootInfo) -> ! {
-    clear_screen(Color::Black);
+    send_command_to_writer(CommandToWriter::ClearScreen(Color::Black));
 
     print_with_colors!(
         MessageToVga::new(Color::Yellow, Color::Black, "Welcome to the "),

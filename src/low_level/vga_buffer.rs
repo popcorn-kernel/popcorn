@@ -1,4 +1,4 @@
-use core::fmt::{self, Write};
+use core::fmt;
 use lazy_static::lazy_static;
 use spin::Mutex;
 use x86_64::instructions::interrupts;
@@ -33,38 +33,16 @@ lazy_static! {
     pub static ref WRITER: Mutex<Writer> =
         Mutex::new(Writer::new(0, Color::Yellow, Color::Black, VGA_BUFFER,));
 }
-
-#[doc(hidden)]
-pub fn print(args: fmt::Arguments) {
-    interrupts::without_interrupts(|| {
-        WRITER.lock().write_fmt(args).unwrap();
-    });
+pub enum CommandToWriter<'a> {
+    Print(fmt::Arguments<'a>),
+    SetColor(Color, Color),
+    ClearScreen(Color),
+    Backspace,
+    CursorBack,
+    CursorFront,
 }
-
-pub fn set_color(foreground: Color, background: Color) {
+pub fn send_command_to_writer(command: CommandToWriter) {
     interrupts::without_interrupts(|| {
-        WRITER.lock().set_color(foreground, background);
-    });
-}
-
-pub fn clear_screen(color: Color) {
-    interrupts::without_interrupts(|| {
-        WRITER.lock().clear_screen(color);
-    });
-}
-
-pub fn backspace() {
-    interrupts::without_interrupts(|| {
-        WRITER.lock().backspace();
-    });
-}
-pub fn cursor_back() {
-    interrupts::without_interrupts(|| {
-        WRITER.lock().cursor_back();
-    });
-}
-pub fn cursor_front() {
-    interrupts::without_interrupts(|| {
-        WRITER.lock().cursor_front();
+        WRITER.lock().handle_command(command);
     });
 }

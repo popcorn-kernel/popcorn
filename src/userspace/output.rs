@@ -1,4 +1,4 @@
-use crate::low_level::vga_buffer::{set_color, Color};
+use crate::low_level::vga_buffer::{send_command_to_writer, Color, CommandToWriter};
 
 #[macro_export]
 macro_rules! print_with_colors {
@@ -8,12 +8,12 @@ macro_rules! print_with_colors {
                 $x.print_to_vga();
             )*
         }
-        popcorn::low_level::vga_buffer::set_color(Color::White, Color::Black);
-    };
+        $crate::low_level::vga_buffer::send_command_to_writer(popcorn::low_level::vga_buffer::CommandToWriter::SetColor(Color::White, Color::Black));
+    }
 }
 #[macro_export]
 macro_rules! print {
-    ($($arg:tt)*) => ($crate::low_level::vga_buffer::print(format_args!($($arg)*)));
+    ($($arg:tt)*) => ($crate::low_level::vga_buffer::send_command_to_writer($crate::low_level::vga_buffer::CommandToWriter::Print(format_args!($($arg)*))));
 }
 
 #[macro_export]
@@ -72,7 +72,7 @@ pub struct MessageToVga<'a> {
 
 impl<'a> MessageToVga<'a> {
     pub fn print_to_vga(&self) {
-        set_color(self.foreground, self.background);
+        send_command_to_writer(CommandToWriter::SetColor(self.foreground, self.background));
         print!("{}", self.string);
     }
     pub fn new(foreground: Color, background: Color, string: &'a str) -> Self {
