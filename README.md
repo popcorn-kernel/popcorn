@@ -13,11 +13,11 @@ Welcome to the Popcorn Kernel project! Our mission is to learn more about operat
 
 <br/>
 
-![GitHub forks](https://img.shields.io/github/forks/popcorn-kernel/popcorn?style=for-the-badge&logo=git&color=F38BA8&logoColor=F38BA8&labelColor=302D41)
+![GitHub forks](https://img.shields.io/github/forks/popcorn-kernel/popcorn?style=for-the-badge&logo=git&color=EBA0AC&logoColor=EBA0AC&labelColor=302D41)
 ![GitHub repo size](https://img.shields.io/github/repo-size/popcorn-kernel/popcorn?style=for-the-badge&logo=github&color=FAB387&logoColor=FAB387&labelColor=302D41)
 ![GitHub issues](https://img.shields.io/github/issues/popcorn-kernel/popcorn?style=for-the-badge&logo=githubactions&color=F9E2AF&logoColor=F9E2AF&labelColor=302D41)
 ![License](https://img.shields.io/github/license/popcorn-kernel/popcorn?style=for-the-badge&logo=gitbook&color=A6E3A1&logoColor=A6E3A1&labelColor=302D41)
-![Discord](https://img.shields.io/discord/1128805264628383784?style=for-the-badge&logo=discord&color=89B4FA&logoColor=89B4FA&labelColor=302D41)
+![Discord](https://img.shields.io/discord/1128805264628383784?style=for-the-badge&logo=discord&color=B4BEFE&logoColor=B4BEFE&labelColor=302D41)
 
 </div>
 
