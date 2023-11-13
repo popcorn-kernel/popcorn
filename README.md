@@ -12,13 +12,18 @@ Welcome to the Popcorn Kernel project! Our mission is to learn more about operat
 <div align="center">
 
 <br/>
-
-![GitHub forks](https://img.shields.io/github/forks/popcorn-kernel/popcorn)
-![GitHub repo size](https://img.shields.io/github/repo-size/popcorn-kernel/popcorn)
-![GitHub issues](https://img.shields.io/github/issues/popcorn-kernel/popcorn)
-![License](https://img.shields.io/github/license/popcorn-kernel/popcorn)
-![Discord](https://img.shields.io/discord/1128805264628383784?color=%235865F2&link=https%3A%2F%2Fdiscord.gg%2Fd9974fz5sS)
-
+<p align="center">
+	<a href="https://github.com/popcorn-kernel/popcorn/forks">
+		<img alt="Forks" src="https://img.shields.io/github/forks/popcorn-kernel/popcorn?style=for-the-badge&logo=git&color=EBA0AC&logoColor=EBA0AC&labelColor=302D41"></a>
+	<a href="https://github.com/popcorn-kernel/popcorn">
+		<img alt="Repo size" src="https://img.shields.io/github/repo-size/popcorn-kernel/popcorn?style=for-the-badge&logo=github&color=FAB387&logoColor=FAB387&labelColor=302D41"/></a>
+	<a href="https://github.com/popcorn-kernel/popcorn/issues">
+		<img alt="Issues" src="https://img.shields.io/github/issues/popcorn-kernel/popcorn?style=for-the-badge&logo=githubactions&color=F9E2AF&logoColor=F9E2AF&labelColor=302D41"></a>
+	<a href="https://opensource.org/license/mit/">
+		<img alt="License" src="https://img.shields.io/github/license/popcorn-kernel/popcorn?style=for-the-badge&logo=gitbook&color=A6E3A1&logoColor=A6E3A1&labelColor=302D41"></a>
+    <a href="https://discord.gg/d9974fz5sS">
+        <img alt="Discord" src="https://img.shields.io/discord/1128805264628383784?style=for-the-badge&logo=discord&color=B4BEFE&logoColor=B4BEFE&labelColor=302D41"></a>
+</p>
 </div>
 
 ## About PURE Ecosystem
@@ -66,10 +71,10 @@ To run the kernel in QEMU, run the following command:
 
 
 
-  | <img src="https://github.com/SparkySimp.png" width="100" height="100"> | <img src="https://github.com/electron271.png" width="100" height="100"> | <img src="https://github.com/SatoTsukasaCode.png" width="100" height="100"> | <img src="https://github.com/Techiesplash.png" width="100" height="100"> |  <img src="https://github.com/HackedOS.png" width="100" height="100"> | <img src="https://github.com/Lily8000.png" width="100" height="100"> |
-  |:---:|:---:|:---:|:---:|:---:|:---:|
-  | [SparkySimp](https://github.com/SparkySimp) | [electron271](https://github.com/electron271) | [SatoTsukasaCode](https://github.com/SatoTsukasaCode) | [Techiesplash](https://github.com/Techiesplash) | [HackedOS](https://github.com/HackedOS) | [Lily8000](https://github.com/Lily8000) |
-  | Lead Developer | Lead Developer | Developer | Developer | Developer | Documentation |
+  | <img src="https://github.com/SparkySimp.png" width="100" height="100"> | <img src="https://github.com/electron271.png" width="100" height="100"> | <img src="https://github.com/SatoTsukasaCode.png" width="100" height="100"> | <img src="https://github.com/Techiesplash.png" width="100" height="100"> |  <img src="https://github.com/HackedOS.png" width="100" height="100"> | <img src="https://github.com/TadoTheMiner.png" width="100" height="100"> |<img src="https://github.com/Lily8000.png" width="100" height="100"> |
+  |:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+  | [SparkySimp](https://github.com/SparkySimp) | [electron271](https://github.com/electron271) | [SatoTsukasaCode](https://github.com/SatoTsukasaCode) | [Techiesplash](https://github.com/Techiesplash) | [HackedOS](https://github.com/HackedOS)| [TadoTheMiner](https://github.com/TadoTheMiner) | [Lily8000](https://github.com/Lily8000) |
+  | Lead Developer | Lead Developer | Developer | Developer | Developer | Developer | Documentation |
 </div>
 </div>
 
@@ -77,5 +82,5 @@ To run the kernel in QEMU, run the following command:
 
 ## Contact us
  [Discord](https://discord.gg/d9974fz5sS)
-
+ [Website](https://popcorn-kernel.dev/) 
 </div>
