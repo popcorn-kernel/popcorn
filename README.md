@@ -5,6 +5,11 @@
 
 ---
 
+# Archival Notice
+As of 11/14/2023 the project is now considered dead so I will be officially archiving this project as of now (1/23/2023).
+For more information, please see [#80](https://github.com/popcorn-kernel/popcorn/issues/80)
+Thanks for everything, its been fun.
+
 </div>
 
 Welcome to the Popcorn Kernel project! Our mission is to learn more about operating systems and expand our coding and developing skills.
